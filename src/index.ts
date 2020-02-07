@@ -20,12 +20,12 @@ import { spawnSync } from "child_process";
  * defines.
  */
 export class CompilerCmdParserResult {
-    includes: Array<string> = [];
-    defines: Array<string> = [];
-    options: Array<string> = [];
+    includes: string[] = [];
+    defines: string[] = [];
+    options: string[] = [];
     compiler: string = "";
     /** Dropped arguments like -c -Ox -o, the input and output file. */
-    trash: Array<string> = [];
+    trash: string[] = [];
 };
 
 export type CompilerCmdParserSearchType = string | RegExp;
@@ -77,14 +77,14 @@ export abstract class CompilerCmdParserEngine
     public match(line: string): CompilerCmdParserResult | undefined
     {
         // check search queries that must match
-        for (let re of this._match) {
-            if (line.search(re) == -1) {
+        for (const re of this._match) {
+            if (line.search(re) === -1) {
                 return undefined;
             }
         }
         // check search queries that mustn't match
-        for (let re of this._nomatch) {
-            if (line.search(re) != -1) {
+        for (const re of this._nomatch) {
+            if (line.search(re) !== -1) {
                 return undefined;
             }
         }
@@ -122,8 +122,8 @@ export class CompilerCmdParserEngineGcc
     }
     protected parse(line: string): CompilerCmdParserResult
     {
-        let result = new CompilerCmdParserResult();
-        let args = line.split(/\s+/);
+        const result = new CompilerCmdParserResult();
+        const args = line.split(/\s+/);
 
         for (let arg of args) {
             
@@ -140,41 +140,41 @@ export class CompilerCmdParserEngineGcc
             //   "-DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\""
             //   "-DARDUINO_BOARD=\"ESP32_DEV\""
             //   "-DARDUINO_VARIANT=\"doitESP32devkitV1\""
-            let packed = arg.match(/^"(.+)"$/);
+            const packed = arg.match(/^"(.+)"$/);
             if (packed) {
                 arg = packed[1];
             }
 
             // extract defines
-            let define = arg.match(/^-D(.+)/);
+            const define = arg.match(/^-D(.+)/);
             if (define) {
                 result.defines.push(define[1]);
                 continue;
             }
             
             // extract includes
-            let include = arg.match(/^-I(.+)/);
+            const include = arg.match(/^-I(.+)/);
             if (include) {
                 result.includes.push(include[1]);
                 continue;
             }
 
             // extract the compiler executable
-            let c = arg.match(/g\+\+$/);
+            const c = arg.match(/g\+\+$/);
             if (c) {
                 result.compiler = arg;
                 continue;
             }
 
             // filter out option trash
-            let t = arg.match(/^-o|^-O|^-g|^-c|cpp(?:\.o){0,1}$/);
+            const t = arg.match(/^-o|^-O|^-g|^-c|cpp(?:\.o){0,1}$/);
             if (t) {
                 result.trash.push(arg);
                 continue;
             }
 
             // collect options
-            let o = arg.match(/^-/);
+            const o = arg.match(/^-/);
             if (o) {
                 result.options.push(arg);
                 continue;
@@ -191,10 +191,10 @@ export class CompilerCmdParserEngineGcc
 
             // Spawn synchronous child process and run bash command
             // Source: https://stackoverflow.com/a/6666338
-            let compilerinfocmd = `${result.compiler} -xc++ -E -v - < /dev/null 2>&1`;
-            let child = spawnSync("bash", ["-c", compilerinfocmd], { encoding : 'utf8' });
+            const compilerinfocmd = `${result.compiler} -xc++ -E -v - < /dev/null 2>&1`;
+            const child = spawnSync("bash", ["-c", compilerinfocmd], { encoding : 'utf8' });
 
-            if (child.error || child.status != 0) {
+            if (child.error || child.status !== 0) {
                 // TODO: report the execution failure
             } else {
                 // Now we look for 
@@ -210,13 +210,13 @@ export class CompilerCmdParserEngineGcc
                 //   #include "..." search starts here:
                 //
                 // but I havn't seen it so far.
-                let includeregex = /^#include\s+<\.\.\.>\ssearch\sstarts\shere\:$(.+)^End\sof\ssearch\slist\.$/ms;
-                let match = child.stdout.match(includeregex);
+                const includeregex = /^#include\s+<\.\.\.>\ssearch\sstarts\shere\:$(.+)^End\sof\ssearch\slist\.$/ms;
+                const match = child.stdout.match(includeregex);
                 if (match) {
                     // Split list by newlines. Should be platform independent
                     let lines = match[1].split(/\s*(?:\r|\r\n|\n)\s*/);
                     // Filter out empty elements (in most cases only the last element)
-                    lines = lines.filter(function (val:string){return val != ""});
+                    lines = lines.filter((val:string) => {return val !== ""});
                     // Add built-in includes to command line includes
                     result.includes = [...result.includes, ...lines];
                 } else {
@@ -271,7 +271,7 @@ export class CompilerCmdParser
      */
     public parse(line: string): boolean
     {
-        for (let engine of this._engines) {
+        for (const engine of this._engines) {
             this._result = engine.match(line);
             if (this._result) {
                 return true;
@@ -296,7 +296,7 @@ export class CompilerCmdParser
     public processResult(configPath: string): boolean
     {
         if (this._result) {
-            let cppProps = new CCppProperties(configPath);
+            const cppProps = new CCppProperties(configPath);
             cppProps.merge(this._result);
             cppProps.write();
             return true;
@@ -332,7 +332,7 @@ export class CCppPropertiesConfiguration {
 
 export class CCppPropertiesContent
 {
-    configurations: Array<CCppPropertiesConfiguration>
+    configurations: CCppPropertiesConfiguration[]
 
     constructor(result: CompilerCmdParserResult)
     {
@@ -364,7 +364,7 @@ export class CCppProperties
     }
     public merge(result: CompilerCmdParserResult)
     {
-        let pc = new CCppPropertiesContent(result);
+        const pc = new CCppPropertiesContent(result);
 
         // TODO:
         //  * merge with existing configuration if desired
@@ -382,7 +382,7 @@ export class CCppProperties
         //  * write file only if modified
 
         if (this.propFileContent) {
-            let content = JSON.stringify(this.propFileContent, null, 4);
+            const content = JSON.stringify(this.propFileContent, null, 4);
             fs.writeFileSync(this.proppath, content);
         }
     }
