@@ -9,5 +9,12 @@ A parser to extract include directories, defines, arguments from compiler comman
 * Tool to generate stimulus and response JSON
 * Make it more generic, i.e. move Arduino stuff into a separate layer
 
+## Publishing
+```bash
+# patch, minor, major, prepatch, preminor, premajor, prerelease
+npm version patch 
+npm publish
+```
+
 ## References
 * [TypeScript package how-to](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
