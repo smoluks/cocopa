@@ -1,0 +1,51 @@
+{
+  "name": "cocopa",
+  "version": "0.0.1",
+  "description": "Compiler Command Parser - Parser to extract include directories, defines, arguments and more from compiler command line invokations.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare" : "npm run build",
+    "prepublishOnly" : "npm test && npm run lint",
+    "preversion" : "npm run lint",
+    "version" : "npm run format && git add -A src",
+    "postversion" : "git push && git push --tags",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elektronikworkshop/cocopa.git"
+  },
+  "keywords": [
+    "compiler",
+    "parser",
+    "include",
+    "directories",
+    "defines",
+    "arguments",
+    "code",
+    "completion",
+    "intellisense"
+  ],
+  "author": "Uli Franke -- Elektronik Workshop",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/elektronikworkshop/cocopa/issues"
+  },
+  "homepage": "https://github.com/elektronikworkshop/cocopa#readme",
+  "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
+    "tslint": "^6.0.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.5"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
