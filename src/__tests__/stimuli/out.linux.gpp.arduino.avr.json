@@ -1,0 +1,43 @@
+{
+    "includes": [
+        "/home/uli/.arduino15/packages/arduino/hardware/avr/1.8.2/cores/arduino",
+        "/home/uli/.arduino15/packages/arduino/hardware/avr/1.8.2/variants/eightanaloginputs",
+        "/home/uli/Projects/arduino/libraries/NewLiquidCrystal_lib",
+        "/home/uli/Projects/arduino/libraries/LcdPong/src",
+        "/home/uli/Projects/arduino/libraries/Encoder",
+        "/home/uli/Projects/arduino/libraries/Button",
+        "/home/uli/.arduino15/packages/arduino/hardware/avr/1.8.2/libraries/Wire/src",
+        "/home/uli/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/bin/../lib/gcc/avr/7.3.0/include",
+        "/home/uli/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/bin/../lib/gcc/avr/7.3.0/include-fixed",
+        "/home/uli/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/bin/../lib/gcc/avr/7.3.0/../../../../avr/include"
+    ],
+    "defines": [
+        "F_CPU=16000000L",
+        "ARDUINO=10811",
+        "ARDUINO_AVR_NANO",
+        "ARDUINO_ARCH_AVR"
+    ],
+    "options": [
+        "-Wall",
+        "-Wextra",
+        "-std=gnu++11",
+        "-fpermissive",
+        "-fno-exceptions",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-fno-threadsafe-statics",
+        "-Wno-error=narrowing",
+        "-MMD",
+        "-flto",
+        "-mmcu=atmega328p"
+    ],
+    "compiler": "/home/uli/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino5/bin/avr-g++",
+    "trash": [
+        "-c",
+        "-g",
+        "-Os",
+        "/tmp/arduino_build_776874/sketch/lcdpong-butenc.ino.cpp",
+        "-o",
+        "/tmp/arduino_build_776874/sketch/lcdpong-butenc.ino.cpp.o"
+    ]
+}
