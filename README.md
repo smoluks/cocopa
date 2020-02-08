@@ -8,6 +8,7 @@ A parser to extract include directories, defines, arguments from compiler comman
 * More documentation
 * Tool to generate stimulus and response JSON
 * Make it more generic, i.e. move Arduino stuff into a separate layer
+* `npm run clean` script to clean up lib -> add to preXY to clean up before making packages
 
 ## Publishing
 ```bash
