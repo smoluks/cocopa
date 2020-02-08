@@ -1,5 +1,6 @@
 import { Result } from './Result';
-/** Class representing the contents of the IntelliSense
+/**
+ * Class representing the contents of the IntelliSense
  * c_cpp_properties.json configuration file.
  *
  * @see https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference

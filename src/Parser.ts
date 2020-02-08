@@ -1,12 +1,14 @@
 import { Result } from './Result';
 
-/** Base class for any compiler command parser engine.
+/**
+ * Base class for any compiler command parser engine.
  * If someone needs to write an engine: this is the base class.
  * For further inspiration take a look at the implementation of
  * CompilerCmdParserEngineGcc.
  */
 export abstract class Parser {
-  /** This array should contain the patterns which should match on
+  /**
+   * This array should contain the patterns which should match on
    * a valid compiler command line to identify the compiler command.
    * To be set by the derived class.
    *
@@ -14,7 +16,8 @@ export abstract class Parser {
    * first and rare/expensive cases last for better performance.
    */
   protected _match: (string | RegExp)[] = [];
-  /** This array should contain the patterns which should _NOT_
+  /**
+   * This array should contain the patterns which should _NOT_
    * match on a valid compiler command line to identify the
    * compiler command.
    * To be set by the derived class.
@@ -23,7 +26,8 @@ export abstract class Parser {
    * first and rare/expensive cases last for better performance.
    */
   protected _nomatch: (string | RegExp)[] = [];
-  /** The parsing function of a matched compiler command line.
+  /**
+   * The parsing function of a matched compiler command line.
    * If all conditions hold true (all _match are found and all _nomatch
    * are not found), this parsing function is invoked.
    *
@@ -36,7 +40,8 @@ export abstract class Parser {
    * and undefined in case it failed fatally.
    */
   protected abstract parse(line: string): Result;
-  /** This function checks if the command line matches the
+  /**
+   * This function checks if the command line matches the
    * requirements given through _match and _nomatch and invokes
    * the parse function in case of a match.
    * @returns If match was found and parsing was successful

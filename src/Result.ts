@@ -1,4 +1,5 @@
-/** Data structure carrying the output from a parsed compiler command.
+/**
+ * Data structure carrying the output from a parsed compiler command.
  * All compiler specific option prefixes are removed for includes and
  * defines.
  */

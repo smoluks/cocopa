@@ -4,7 +4,8 @@ import { Parser } from './Parser';
 
 import * as path from 'path';
 
-/** Compiler command parsing engine for gcc compilers.
+/**
+ *  Compiler command parsing engine for gcc compilers.
  *
  *
  */
