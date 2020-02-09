@@ -1,4 +1,3 @@
-
 import { Result } from './Result';
 import { Parser } from './Parser';
 

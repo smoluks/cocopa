@@ -12,11 +12,7 @@ export class ParserGcc extends Parser {
    *
    */
   constructor(matchPattern: (string | RegExp)[] = [], dontMatchPattern: (string | RegExp)[] = []) {
-    super(
-      matchPattern,
-      dontMatchPattern,
-      new BuiltInInfoParserGcc(),
-    );
+    super(matchPattern, dontMatchPattern, new BuiltInInfoParserGcc());
   }
   protected parse(line: string): Result {
     const result = new Result();

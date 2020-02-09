@@ -6,12 +6,12 @@ test(`compiler built-in info parser`, () => {
 
   const testFile = 'test.cpp';
   const match = [
-        // make sure we're running g++
-        /(?:^|-)g\+\+\s+/,
-        // make sure we're compiling
-        /\s+-c\s+/,
-        // user defined match pattern
-        `${testFile}.o`
+    // make sure we're running g++
+    /(?:^|-)g\+\+\s+/,
+    // make sure we're compiling
+    /\s+-c\s+/,
+    // user defined match pattern
+    `${testFile}.o`,
   ];
   const p = new ParserGcc(match);
 
