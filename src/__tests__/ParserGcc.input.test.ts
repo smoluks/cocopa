@@ -27,8 +27,12 @@ for (const stimFileName of fs.readdirSync(stimuliDir)) {
     };
 
     const matchPattern = [
-      // trigger parser when compiling the main sketch
-      `${stimulus.infile}.cpp.o`,
+        // make sure we're running g++
+        /(?:^|-)g\+\+\s+/,
+        // make sure we're compiling
+        /\s+-c\s+/,
+        // trigger parser when compiling the main sketch
+        `${stimulus.infile}.cpp.o`,
     ];
     const dontMatchPattern = [
       // make sure Arduino's not testing libraries

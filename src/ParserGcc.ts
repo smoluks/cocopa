@@ -13,14 +13,7 @@ export class ParserGcc extends Parser {
    */
   constructor(matchPattern: (string | RegExp)[] = [], dontMatchPattern: (string | RegExp)[] = []) {
     super(
-      [
-        // make sure we're running g++
-        /(?:^|-)g\+\+\s+/,
-        // make sure we're compiling
-        /\s+-c\s+/,
-        // user defined match pattern
-        ...matchPattern,
-      ],
+      matchPattern,
       dontMatchPattern,
       new BuiltInInfoParserGcc(),
     );

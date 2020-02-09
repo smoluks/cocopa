@@ -5,14 +5,22 @@ test(`compiler built-in info parser`, () => {
   const spawnSyncSpy = makeSpawnSyncSpy('gpp.amd64.builtin.stimulus.txt');
 
   const testFile = 'test.cpp';
-  const p = new ParserGcc([`${testFile}.o`]);
+  const match = [
+        // make sure we're running g++
+        /(?:^|-)g\+\+\s+/,
+        // make sure we're compiling
+        /\s+-c\s+/,
+        // user defined match pattern
+        `${testFile}.o`
+  ];
+  const p = new ParserGcc(match);
 
   expect(p.infoParser).toBeDefined();
 
   const cmd = `mock-g++ -c -o ${testFile}.o ${testFile}`;
-  const match = p.match(cmd);
+  const result = p.match(cmd);
 
-  if (!match) {
+  if (!result) {
     fail('compiler command line did not trigger');
   }
 
@@ -26,9 +34,9 @@ test(`compiler built-in info parser`, () => {
     '/usr/include/x86_64-linux-gnu',
     '/usr/include',
   ];
-  expect(match.compiler).toStrictEqual('mock-g++');
-  expect(match.trash).toStrictEqual(['-c', '-o', `${testFile}.o`, testFile]);
-  expect(match.includes).toStrictEqual(includes);
+  expect(result.compiler).toStrictEqual('mock-g++');
+  expect(result.trash).toStrictEqual(['-c', '-o', `${testFile}.o`, testFile]);
+  expect(result.includes).toStrictEqual(includes);
 
   spawnSyncSpy.mockClear();
 });

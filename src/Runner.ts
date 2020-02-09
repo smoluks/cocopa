@@ -1,4 +1,4 @@
-import { CCppProperties } from './CCppProperties';
+
 import { Result } from './Result';
 import { Parser } from './Parser';
 
@@ -66,20 +66,5 @@ export class Runner {
         this.parse(line);
       }
     };
-  }
-  /**
-   * @todo Should define a ResultProcessor interface and
-   * CCppProperties should adapt them - this way we can
-   * keep IntelliSense stuff out of this class
-   * @param configPath
-   */
-  public processResult(configPath: string): boolean {
-    if (this._result) {
-      const cppProps = new CCppProperties(configPath);
-      cppProps.merge(this._result);
-      cppProps.write();
-      return true;
-    }
-    return false;
   }
 }
