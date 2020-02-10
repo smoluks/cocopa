@@ -1,5 +1,4 @@
-
-import { regExEscape, removeDuplicatesFrom} from './helpers'
+import { regExEscape, removeDuplicatesFrom } from './helpers';
 import { Parser } from './Parser';
 import { Runner } from './Runner';
 import { Result } from './Result';
@@ -29,7 +28,6 @@ export {
   CCppPropertiesCStandard,
   CCppPropertiesCppStandard,
   CCppPropertiesMergeMode,
-
-  regExEscape, removeDuplicatesFrom,
+  regExEscape,
+  removeDuplicatesFrom,
 };
-
