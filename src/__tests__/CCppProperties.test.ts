@@ -5,6 +5,7 @@ import {
     CCppPropertiesContent,
     CCppPropertiesMergeMode,
 } from "../CCppPropertiesContent";
+import { CCppPropertiesConfiguration, CCppPropertiesISMode, CCppPropertiesCStandard, CCppPropertiesCppStandard } from "../CCppPropertiesConfiguration";
 
 /**
  *
@@ -48,4 +49,41 @@ test(`CCppProperties write`, () => {
     fsExistsSyncSpy.mockClear();
     fsMkdirSyncSpy.mockClear();
     fsWriteFileSyncSpy.mockClear();
+});
+
+test(`CCppProperties merge`, () => {
+
+    const p = new CCppProperties();
+
+    // we didn't call read - content must be undefined
+    expect(p.content).toBeUndefined();
+
+    const cp = "compiler/path-g++";
+    const ca = ["-fcompilerargs", "-Wall"];
+    const ic = ["my/include/dir", "my other include/dir"];
+    const df = ["FAST_MODE=1", 'VERSION="3.8.9"'];
+    const nameOriginal = "original";
+    const nameOther = "other";
+    const im = CCppPropertiesISMode.Gcc_X64;
+    const cs = CCppPropertiesCStandard.C11;
+    const cpp = CCppPropertiesCppStandard.Cpp11;
+    const fi: string[] = [];
+
+
+    const originalConf = new CCppPropertiesConfiguration(cp, ca, ic, df, nameOriginal, im, cs, cpp, fi);
+    const original = new CCppPropertiesContent([originalConf]);
+
+    const otherConf = new CCppPropertiesConfiguration(cp, ca, ic, df, nameOther, im, cs, cpp, fi);
+    const other = new CCppPropertiesContent([otherConf]);
+    
+    expect(original.equals(other)).toBe(false);
+
+    original.merge(other, CCppPropertiesMergeMode.Replace);
+
+    expect(original.equals(other)).toBe(true);
+    expect(original.configurations[0].name).toBe(nameOther);
+
+    // check if empty name gets dropped
+
+    // check equals for CCppPropertiesContent and CCppPropertiesConfiguration
 });

@@ -50,30 +50,19 @@ export class CCppPropertiesContent {
      * Configurations with empty names will be dropped
      *
      * @param other Content to be merged into this instance.
-     * @returns true if orignal has been altered.
+     * @returns true if orignal (this) has been altered.
      */
     public merge(other: CCppPropertiesContent, mode: CCppPropertiesMergeMode) {
-        let modified = false;
 
         if (mode === CCppPropertiesMergeMode.Replace) {
-            if (this.configurations.length !== other.configurations.length) {
-                modified = true;
-            } else {
-                // TODO: no one quarantees same order - how stringent do we like to be?
-                for (let i = 0; i < this.configurations.length; i++) {
-                    if (
-                        !this.configurations[i].equals(other.configurations[i])
-                    ) {
-                        modified = true;
-                        break;
-                    }
-                }
-            }
-            if (modified) {
+            if (!this.equals(other)) {
                 this.configurations = other.configurations;
+                return true;
             }
-            return modified;
+            return false;
         }
+
+        let modified = false;
 
         for (const otherConf of other.configurations) {
             // We don't allow empty names
@@ -155,5 +144,22 @@ export class CCppPropertiesContent {
             good.copyInto(c);
             this.configurations.push(good);
         }
+    }
+
+    public equals(rhs: CCppPropertiesContent) {
+
+        if (this.configurations.length !== rhs.configurations.length) {
+            return false;
+        }
+
+        // TODO: no one quarantees same order - how stringent do we like to be?
+
+        for (let i = 0; i < this.configurations.length; i++) {
+            if (!this.configurations[i].equals(rhs.configurations[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
