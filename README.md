@@ -21,12 +21,13 @@ A parser to extract include directories, defines, arguments from compiler comman
   * Unit testing:
     * :heavy_check_mark: Use mocked gcc to test built-in info parser and test if it generates a valid list
     * :heavy_check_mark: Test parser for compiler built-in info 
-    * :white_check_mark: Tests for all known arduino platforms
+    * :white_check_mark: Tests for compile output of all known arduino platforms
     * :white_check_mark: Throwing arbitrary data at parser engines
     * :white_check_mark: JSON input
     * :white_check_mark: JSON output
     * :white_check_mark: Configuration merging
 * Later:
+  * [Migrate to ESLint](https://code.visualstudio.com/api/advanced-topics/tslint-eslint-migration)
   * Rewrite file and child process calls to be async
 
 ## Publishing
@@ -38,3 +39,5 @@ npm publish
 
 ## References
 * [TypeScript package how-to](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
+* [Prettier](https://prettier.io/)
+* [Prettier configuration](https://prettier.io/docs/en/configuration.html)

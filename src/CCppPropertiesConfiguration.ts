@@ -1,22 +1,22 @@
-import { arraysEqual } from './helpers';
+import {arraysEqual} from "./helpers";
 
 export enum CCppPropertiesISMode {
-  None = '',
-  Gcc_X64 = 'gcc-x64',
+    None = "",
+    Gcc_X64 = "gcc-x64",
 }
 
 export enum CCppPropertiesCStandard {
-  None = '',
-  C99 = 'c99',
-  C11 = 'c11',
+    None = "",
+    C99 = "c99",
+    C11 = "c11",
 }
 
 export enum CCppPropertiesCppStandard {
-  None = '',
-  Cpp98 = 'c++98',
-  Cpp11 = 'c++11',
-  Cpp14 = 'c++14',
-  Cpp17 = 'c++17',
+    None = "",
+    Cpp98 = "c++98",
+    Cpp11 = "c++11",
+    Cpp14 = "c++14",
+    Cpp17 = "c++17",
 }
 
 /**
@@ -31,60 +31,62 @@ export enum CCppPropertiesCppStandard {
  *  > Member names must not be changed since they represent JSON field names
  */
 export class CCppPropertiesConfiguration {
-  name: string;
-  compilerPath: string;
-  compilerArgs: string[];
-  intelliSenseMode: string;
-  includePath: string[];
-  forcedInclude: string[];
-  cStandard: string;
-  cppStandard: string;
-  defines: string[];
+    name: string;
+    compilerPath: string;
+    compilerArgs: string[];
+    intelliSenseMode: string;
+    includePath: string[];
+    forcedInclude: string[];
+    cStandard: string;
+    cppStandard: string;
+    defines: string[];
 
-  constructor(
-    compilerPath: string = '',
-    compilerArgs: string[] = [],
-    includePath: string[] = [],
-    defines: string[] = [],
-    name: string = '',
-    isMode: CCppPropertiesISMode = CCppPropertiesISMode.None,
-    cStandard: CCppPropertiesCStandard = CCppPropertiesCStandard.None,
-    cppStandard: CCppPropertiesCppStandard = CCppPropertiesCppStandard.None,
-    forcedInclude: string[] = [],
-  ) {
-    this.name = name;
-    this.compilerPath = compilerPath;
-    this.compilerArgs = compilerArgs;
-    this.intelliSenseMode = isMode;
-    this.includePath = includePath;
-    this.forcedInclude = forcedInclude;
-    this.cStandard = cStandard;
-    this.cppStandard = cppStandard;
-    this.defines = defines;
-  }
-  // TODO: check type?
-  public copyInto(other: CCppPropertiesConfiguration) {
-    this.name = other.name ? other.name : '';
-    this.compilerPath = other.compilerPath ? other.compilerPath : '';
-    this.compilerArgs = other.compilerArgs ? other.compilerArgs : [];
-    this.intelliSenseMode = other.intelliSenseMode ? other.intelliSenseMode : '';
-    this.includePath = other.includePath ? other.includePath : [];
-    this.forcedInclude = other.forcedInclude ? other.forcedInclude : [];
-    this.cStandard = other.cStandard ? other.cStandard : '';
-    this.cppStandard = other.cppStandard ? other.cppStandard : '';
-    this.defines = other.defines ? other.defines : [];
-  }
-  public equals(rhs: CCppPropertiesConfiguration) {
-    return (
-      this.name === rhs.name &&
-      this.compilerPath === rhs.compilerPath &&
-      arraysEqual(this.compilerArgs, rhs.compilerArgs) &&
-      this.intelliSenseMode === rhs.intelliSenseMode &&
-      arraysEqual(this.includePath, rhs.includePath) &&
-      arraysEqual(this.forcedInclude, rhs.forcedInclude) &&
-      this.cStandard === rhs.cStandard &&
-      this.cppStandard === rhs.cppStandard &&
-      arraysEqual(this.defines, rhs.defines)
-    );
-  }
+    constructor(
+        compilerPath: string = "",
+        compilerArgs: string[] = [],
+        includePath: string[] = [],
+        defines: string[] = [],
+        name: string = "",
+        isMode: CCppPropertiesISMode = CCppPropertiesISMode.None,
+        cStandard: CCppPropertiesCStandard = CCppPropertiesCStandard.None,
+        cppStandard: CCppPropertiesCppStandard = CCppPropertiesCppStandard.None,
+        forcedInclude: string[] = [],
+    ) {
+        this.name = name;
+        this.compilerPath = compilerPath;
+        this.compilerArgs = compilerArgs;
+        this.intelliSenseMode = isMode;
+        this.includePath = includePath;
+        this.forcedInclude = forcedInclude;
+        this.cStandard = cStandard;
+        this.cppStandard = cppStandard;
+        this.defines = defines;
+    }
+    // TODO: check type?
+    public copyInto(other: CCppPropertiesConfiguration) {
+        this.name = other.name ? other.name : "";
+        this.compilerPath = other.compilerPath ? other.compilerPath : "";
+        this.compilerArgs = other.compilerArgs ? other.compilerArgs : [];
+        this.intelliSenseMode = other.intelliSenseMode
+            ? other.intelliSenseMode
+            : "";
+        this.includePath = other.includePath ? other.includePath : [];
+        this.forcedInclude = other.forcedInclude ? other.forcedInclude : [];
+        this.cStandard = other.cStandard ? other.cStandard : "";
+        this.cppStandard = other.cppStandard ? other.cppStandard : "";
+        this.defines = other.defines ? other.defines : [];
+    }
+    public equals(rhs: CCppPropertiesConfiguration) {
+        return (
+            this.name === rhs.name &&
+            this.compilerPath === rhs.compilerPath &&
+            arraysEqual(this.compilerArgs, rhs.compilerArgs) &&
+            this.intelliSenseMode === rhs.intelliSenseMode &&
+            arraysEqual(this.includePath, rhs.includePath) &&
+            arraysEqual(this.forcedInclude, rhs.forcedInclude) &&
+            this.cStandard === rhs.cStandard &&
+            this.cppStandard === rhs.cppStandard &&
+            arraysEqual(this.defines, rhs.defines)
+        );
+    }
 }

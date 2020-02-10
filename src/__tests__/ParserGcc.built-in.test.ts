@@ -1,42 +1,67 @@
-import { ParserGcc } from '../ParserGcc';
-import { makeSpawnSyncSpy } from './mocks';
+import * as cp from "child_process";
+import {ParserGcc} from "../ParserGcc";
+import {makeSpawnSyncSpy} from "./mocks";
+import {
+    makeBuiltInInfoParserGccShell,
+    makeBuiltInInfoParserGccShellArgs,
+} from "../BuiltInInfoParserGcc";
 
 test(`compiler built-in info parser`, () => {
-  const spawnSyncSpy = makeSpawnSyncSpy('gpp.amd64.builtin.stimulus.txt');
+    const exe = "mock-g++";
 
-  const testFile = 'test.cpp';
-  const match = [
-    // make sure we're running g++
-    /(?:^|-)g\+\+\s+/,
-    // make sure we're compiling
-    /\s+-c\s+/,
-    // user defined match pattern
-    `${testFile}.o`,
-  ];
-  const p = new ParserGcc(match);
+    const gccCallCallback = (
+        command: string,
+        args?: ReadonlyArray<string>,
+        options?: cp.SpawnSyncOptionsWithStringEncoding,
+    ) => {
+        expect(command).toBe(makeBuiltInInfoParserGccShell());
+        if (!args) {
+            fail("this must not happen!");
+        }
+        expect(args.length).toBe(2);
+        expect(args).toStrictEqual(makeBuiltInInfoParserGccShellArgs(exe));
+    };
 
-  expect(p.infoParser).toBeDefined();
+    const spawnSyncSpy = makeSpawnSyncSpy(
+        "gpp.amd64.builtin.stimulus.txt",
+        gccCallCallback,
+    );
 
-  const cmd = `mock-g++ -c -o ${testFile}.o ${testFile}`;
-  const result = p.match(cmd);
+    const testFile = "test.cpp";
+    const cmd = `${exe} -c -o ${testFile}.o ${testFile}`;
 
-  if (!result) {
-    fail('compiler command line did not trigger');
-  }
+    const match = [
+        // make sure we're running g++
+        /(?:^|-)g\+\+\s+/,
+        // make sure we're compiling
+        /\s+-c\s+/,
+        // user defined match pattern
+        `${testFile}.o`,
+    ];
+    const p = new ParserGcc(match);
 
-  const includes = [
-    '/usr/include/c++/7',
-    '/usr/include/x86_64-linux-gnu/c++/7',
-    '/usr/include/c++/7/backward',
-    '/usr/lib/gcc/x86_64-linux-gnu/7/include',
-    '/usr/local/include',
-    '/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed',
-    '/usr/include/x86_64-linux-gnu',
-    '/usr/include',
-  ];
-  expect(result.compiler).toStrictEqual('mock-g++');
-  expect(result.trash).toStrictEqual(['-c', '-o', `${testFile}.o`, testFile]);
-  expect(result.includes).toStrictEqual(includes);
+    expect(p.infoParser).toBeDefined();
 
-  spawnSyncSpy.mockClear();
+    const result = p.match(cmd);
+
+    if (!result) {
+        fail("compiler command line did not trigger");
+    }
+
+    // Manually extracted includes from stimulus
+    const includes = [
+        "/usr/include/c++/7",
+        "/usr/include/x86_64-linux-gnu/c++/7",
+        "/usr/include/c++/7/backward",
+        "/usr/lib/gcc/x86_64-linux-gnu/7/include",
+        "/usr/local/include",
+        "/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed",
+        "/usr/include/x86_64-linux-gnu",
+        "/usr/include",
+    ];
+    expect(result.compiler).toStrictEqual("mock-g++");
+    expect(result.trash).toStrictEqual(["-c", "-o", `${testFile}.o`, testFile]);
+    expect(result.includes).toStrictEqual(includes);
+
+    spawnSyncSpy.mockClear();
 });
