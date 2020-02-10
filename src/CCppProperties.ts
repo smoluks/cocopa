@@ -61,23 +61,23 @@ export class CCppProperties {
 
     public write(pPath: string) {
         // NOTE: in JSON backslashes are escaped to \\\\
-        // TODO:
-        //  * write file only if modified
+
         if (this._content && this._changed) {
             // create properties folder in case it does not exist
             const propFolder = path.dirname(pPath);
+
             if (!fs.existsSync(propFolder)) {
                 fs.mkdirSync(propFolder, {recursive: true});
             }
 
-            // erase empty elements ("" and []) to keep JSON clean?
-
-            const content = JSON.stringify(this._content, null, 4);
-            fs.writeFileSync(pPath, content);
+            fs.writeFileSync(pPath, this.stringyfy());
 
             this._changed = false;
             return true;
         }
         return false;
+    }
+    public stringyfy() {
+        return JSON.stringify(this._content, null, 4);
     }
 }

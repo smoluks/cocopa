@@ -5,6 +5,7 @@ import {BuiltInInfoParser} from "./BuiltInInfoParser";
  */
 export const BuiltInInfoParserGccCmd = "-xc++ -E -v - < /dev/null 2>&1";
 
+// TODO: Windows/OSX
 export function makeBuiltInInfoParserGccShellArgs(exe: string) {
     return ["-c", `${exe} ${BuiltInInfoParserGccCmd}`];
 }
@@ -17,8 +18,6 @@ export class BuiltInInfoParserGcc extends BuiltInInfoParser {
     public info(
         exe: string,
     ): {includes: string[]; defines: string[]} | undefined {
-        // TODO: Windows/OSX
-
         const args = ["-c", `${exe} ${BuiltInInfoParserGccCmd}`];
 
         const query = this.runQuery(
