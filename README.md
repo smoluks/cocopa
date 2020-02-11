@@ -1,5 +1,5 @@
 # cocopa - Compiler Command Parser
-A parser to extract include directories, defines, arguments from compiler command line invokations and can extract the compiler's built-in configuration.
+A parser to extract include directories, defines, arguments from compiler command line invocations and can extract the compiler's built-in configuration.
 
 &nbsp;&nbsp;&nbsp;&nbsp;**This is work in progress as long you read this message -- be prepared for heavy API changes**
 

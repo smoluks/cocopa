@@ -53,7 +53,6 @@ export class CCppPropertiesContent {
      * @returns true if orignal (this) has been altered.
      */
     public merge(other: CCppPropertiesContent, mode: CCppPropertiesMergeMode) {
-
         if (mode === CCppPropertiesMergeMode.Replace) {
             if (!this.equals(other)) {
                 this.configurations = other.configurations;
@@ -147,7 +146,6 @@ export class CCppPropertiesContent {
     }
 
     public equals(rhs: CCppPropertiesContent | undefined) {
-
         if (!rhs || this.configurations.length !== rhs.configurations.length) {
             return false;
         }
@@ -165,5 +163,5 @@ export class CCppPropertiesContent {
 
     public confByName(name: string) {
         return this.configurations.find(v => v.name === name);
-    }        
+    }
 }

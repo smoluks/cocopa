@@ -1,5 +1,4 @@
-import { makeRandomInt } from "./common";
-
+import {makeRandomInt} from "./common";
 
 /**
  * Tests the random number generation.
@@ -14,8 +13,8 @@ test(`makeRandomInt`, () => {
         const v = makeRandomInt(MIN, MAX);
         expect(v).toBeLessThanOrEqual(MAX);
         expect(v).toBeGreaterThanOrEqual(MIN);
-        max = v > max ? v : max ;
-        min = v < min ? v : min ;
+        max = v > max ? v : max;
+        min = v < min ? v : min;
     }
     // Note: on rare occasions this can fail - it's random
     // but if it fails multiple times we have a range problem.
@@ -24,7 +23,7 @@ test(`makeRandomInt`, () => {
     // is pretty much 1.
     // For 1100 iterations with 0 .. 10 we have a probability of
     // 1100 / 11 = 100 -> if evenly distributed we should get
-    // around 100 hits for the highest and lowest value 
+    // around 100 hits for the highest and lowest value
     expect(min).toBe(MIN);
     expect(max).toBe(MAX);
 });

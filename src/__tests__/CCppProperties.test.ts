@@ -5,34 +5,42 @@ import {
     CCppPropertiesContent,
     CCppPropertiesMergeMode,
 } from "../CCppPropertiesContent";
-import { CCppPropertiesConfiguration, CCppPropertiesISMode, CCppPropertiesCStandard, CCppPropertiesCppStandard } from "../CCppPropertiesConfiguration";
-import { makeRandomString, makeRandomStringArray, randomEnumItem } from "./common";
+import {
+    CCppPropertiesConfiguration,
+    CCppPropertiesISMode,
+    CCppPropertiesCStandard,
+    CCppPropertiesCppStandard,
+} from "../CCppPropertiesConfiguration";
+import {
+    makeRandomString,
+    makeRandomStringArray,
+    randomEnumItem,
+} from "./common";
 
 /**
- * 
+ *
  * @param name Configuration name
  * @param N Number of configurations to generate
  */
-function makeConf(
-    name: string = makeRandomString(),
-    N: number = 1,
-) {
-    const r: CCppPropertiesConfiguration[] = []
+function makeConf(name: string = makeRandomString(), N: number = 1) {
+    const r: CCppPropertiesConfiguration[] = [];
     for (let i = 0; i < N; i++) {
-        r.push(new CCppPropertiesConfiguration(
-            makeRandomString(),
-            makeRandomStringArray(),
-            makeRandomStringArray(),
-            makeRandomStringArray(),
-            N <= 1 ? name : `${name}-${i}`,
-            randomEnumItem(CCppPropertiesISMode),
-            randomEnumItem(CCppPropertiesCStandard),
-            randomEnumItem(CCppPropertiesCppStandard),
-            makeRandomStringArray(),
-        ))
+        r.push(
+            new CCppPropertiesConfiguration(
+                makeRandomString(),
+                makeRandomStringArray(),
+                makeRandomStringArray(),
+                makeRandomStringArray(),
+                N <= 1 ? name : `${name}-${i}`,
+                randomEnumItem(CCppPropertiesISMode),
+                randomEnumItem(CCppPropertiesCStandard),
+                randomEnumItem(CCppPropertiesCppStandard),
+                makeRandomStringArray(),
+            ),
+        );
     }
     return r;
-};
+}
 
 /**
  *
@@ -79,7 +87,6 @@ test(`CCppProperties write`, () => {
 });
 
 test(`CCppProperties merge`, () => {
-
     const p = new CCppProperties();
 
     // we didn't call read - content must be undefined
@@ -90,7 +97,7 @@ test(`CCppProperties merge`, () => {
 
     let original = new CCppPropertiesContent(makeConf("a"));
     let other = new CCppPropertiesContent(makeConf("b"));
-    
+
     expect(original.equals(other)).toBe(false);
 
     let res = original.merge(other, CCppPropertiesMergeMode.Replace);
@@ -99,10 +106,9 @@ test(`CCppProperties merge`, () => {
     expect(original.equals(other)).toBe(true);
     expect(original.configurations[0].name).toBe("b");
 
-
     ////
     // Test CCppPropertiesMergeMode.ReplaceSameNames
-    // 
+    //
     // -> configurations with same name will be merged
     // -> if any of the configurations to be merged has no
     //      name set it must be dropped
@@ -127,22 +133,26 @@ test(`CCppProperties merge`, () => {
     // the configuration we merged in
     expect(res).toBe(true);
     expect(original.configurations.length).toBe(2);
-    expect(original.configurations[1].equals(other.configurations[0])).toBe(true);
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(
+        true,
+    );
 
     // Test merging with valid but same name
     //   since we're using random configurations, the new "b"
     //   must be different than the "b" we created above
     other = new CCppPropertiesContent(makeConf("b"));
-    expect(original.configurations[1].equals(other.configurations[0])).toBe(false);
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(
+        false,
+    );
     res = original.merge(other, CCppPropertiesMergeMode.ReplaceSameNames);
     expect(res).toBe(true);
-    expect(original.configurations[1].equals(other.configurations[0])).toBe(true);
-
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(
+        true,
+    );
 
     ////
     // Test CCppPropertiesMergeMode.Complement
-    // 
-
+    //
 
     // test if it doesn't modify if source contains empty values
 });
