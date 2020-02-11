@@ -146,9 +146,9 @@ export class CCppPropertiesContent {
         }
     }
 
-    public equals(rhs: CCppPropertiesContent) {
+    public equals(rhs: CCppPropertiesContent | undefined) {
 
-        if (this.configurations.length !== rhs.configurations.length) {
+        if (!rhs || this.configurations.length !== rhs.configurations.length) {
             return false;
         }
 
@@ -162,4 +162,8 @@ export class CCppPropertiesContent {
 
         return true;
     }
+
+    public confByName(name: string) {
+        return this.configurations.find(v => v.name === name);
+    }        
 }

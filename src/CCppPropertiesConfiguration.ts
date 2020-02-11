@@ -3,12 +3,15 @@ import {arraysEqual} from "./helpers";
 export enum CCppPropertiesISMode {
     None = "",
     Gcc_X64 = "gcc-x64",
+    CLang_X64 = "clang-x64",
+    MSVC_X64 = "msvc-x64",
 }
 
 export enum CCppPropertiesCStandard {
     None = "",
     C99 = "c99",
     C11 = "c11",
+    C18 = "c18",
 }
 
 export enum CCppPropertiesCppStandard {

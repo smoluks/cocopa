@@ -6,6 +6,33 @@ import {
     CCppPropertiesMergeMode,
 } from "../CCppPropertiesContent";
 import { CCppPropertiesConfiguration, CCppPropertiesISMode, CCppPropertiesCStandard, CCppPropertiesCppStandard } from "../CCppPropertiesConfiguration";
+import { makeRandomString, makeRandomStringArray, randomEnumItem } from "./common";
+
+/**
+ * 
+ * @param name Configuration name
+ * @param N Number of configurations to generate
+ */
+function makeConf(
+    name: string = makeRandomString(),
+    N: number = 1,
+) {
+    const r: CCppPropertiesConfiguration[] = []
+    for (let i = 0; i < N; i++) {
+        r.push(new CCppPropertiesConfiguration(
+            makeRandomString(),
+            makeRandomStringArray(),
+            makeRandomStringArray(),
+            makeRandomStringArray(),
+            N <= 1 ? name : `${name}-${i}`,
+            randomEnumItem(CCppPropertiesISMode),
+            randomEnumItem(CCppPropertiesCStandard),
+            randomEnumItem(CCppPropertiesCppStandard),
+            makeRandomStringArray(),
+        ))
+    }
+    return r;
+};
 
 /**
  *
@@ -58,32 +85,73 @@ test(`CCppProperties merge`, () => {
     // we didn't call read - content must be undefined
     expect(p.content).toBeUndefined();
 
-    const cp = "compiler/path-g++";
-    const ca = ["-fcompilerargs", "-Wall"];
-    const ic = ["my/include/dir", "my other include/dir"];
-    const df = ["FAST_MODE=1", 'VERSION="3.8.9"'];
-    const nameOriginal = "original";
-    const nameOther = "other";
-    const im = CCppPropertiesISMode.Gcc_X64;
-    const cs = CCppPropertiesCStandard.C11;
-    const cpp = CCppPropertiesCppStandard.Cpp11;
-    const fi: string[] = [];
+    ////
+    // Test CCppPropertiesMergeMode.Replace
 
-
-    const originalConf = new CCppPropertiesConfiguration(cp, ca, ic, df, nameOriginal, im, cs, cpp, fi);
-    const original = new CCppPropertiesContent([originalConf]);
-
-    const otherConf = new CCppPropertiesConfiguration(cp, ca, ic, df, nameOther, im, cs, cpp, fi);
-    const other = new CCppPropertiesContent([otherConf]);
+    let original = new CCppPropertiesContent(makeConf("a"));
+    let other = new CCppPropertiesContent(makeConf("b"));
     
     expect(original.equals(other)).toBe(false);
 
-    original.merge(other, CCppPropertiesMergeMode.Replace);
+    let res = original.merge(other, CCppPropertiesMergeMode.Replace);
 
+    expect(res).toBe(true);
     expect(original.equals(other)).toBe(true);
-    expect(original.configurations[0].name).toBe(nameOther);
+    expect(original.configurations[0].name).toBe("b");
 
-    // check if empty name gets dropped
 
-    // check equals for CCppPropertiesContent and CCppPropertiesConfiguration
+    ////
+    // Test CCppPropertiesMergeMode.ReplaceSameNames
+    // 
+    // -> configurations with same name will be merged
+    // -> if any of the configurations to be merged has no
+    //      name set it must be dropped
+
+    // Test, if configuration with empty name will get dropped
+
+    original = new CCppPropertiesContent(makeConf("a"));
+    other = new CCppPropertiesContent(makeConf(""));
+
+    expect(original.equals(other)).toBe(false);
+
+    res = original.merge(other, CCppPropertiesMergeMode.ReplaceSameNames);
+
+    expect(res).toBe(false);
+    expect(original.equals(other)).toBe(false);
+
+    // Test merging with valid but different name
+
+    other.configurations[0].name = "b";
+    res = original.merge(other, CCppPropertiesMergeMode.ReplaceSameNames);
+    // we have now two configurations and the second configuration should be
+    // the configuration we merged in
+    expect(res).toBe(true);
+    expect(original.configurations.length).toBe(2);
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(true);
+
+    // Test merging with valid but same name
+    //   since we're using random configurations, the new "b"
+    //   must be different than the "b" we created above
+    other = new CCppPropertiesContent(makeConf("b"));
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(false);
+    res = original.merge(other, CCppPropertiesMergeMode.ReplaceSameNames);
+    expect(res).toBe(true);
+    expect(original.configurations[1].equals(other.configurations[0])).toBe(true);
+
+
+    ////
+    // Test CCppPropertiesMergeMode.Complement
+    // 
+
+
+    // test if it doesn't modify if source contains empty values
 });
+
+test(`CCppProperties confByName`, () => {
+    const p = new CCppPropertiesContent(makeConf("my-conf", 3));
+
+    expect(p.confByName("my-conf-X")).toBeUndefined();
+    expect(p.confByName("my-conf-2")).toBeDefined();
+});
+
+// test "equals" for CCppPropertiesContent and CCppPropertiesConfiguration
