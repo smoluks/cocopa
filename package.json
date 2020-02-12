@@ -39,7 +39,7 @@
   "homepage": "https://github.com/elektronikworkshop/cocopa#readme",
   "devDependencies": {
     "@types/jest": "^25.1.2",
-    "@types/node": "^12.7.4",
+    "@types/node": "^13.7.1",
     "jest": "^25.1.0",
     "prettier": "^1.19.1",
     "ts-jest": "^25.2.0",
@@ -50,5 +50,11 @@
   "files": [
     "lib/**/*"
   ],
-  "dependencies": {}
+  "bin": {
+    "cocopa": "./lib/cocopa.js"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "commander": "^4.1.1"
+  }
 }

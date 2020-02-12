@@ -45,3 +45,4 @@ npm publish
 * [TypeScript package how-to](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
 * [Prettier](https://prettier.io/)
 * [Prettier configuration](https://prettier.io/docs/en/configuration.html)
+* [Node command line package](https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e)
