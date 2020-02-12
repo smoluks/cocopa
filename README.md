@@ -4,6 +4,10 @@ A parser to extract include directories, defines, arguments from compiler comman
 &nbsp;&nbsp;&nbsp;&nbsp;**This is work in progress as long you read this message -- be prepared for heavy API changes**
 
 ## TODO
+* Write command line tool which
+  * Can read the `.vscode/arduino.json` to get the main sketch and the board
+  * Run the arduino build command and run the parser
+  * provide a task file to vscode
 * Test compiler built-in extraction separately since not everybody has the exact same compiler on its system even on my system this will break as soon as arduino board packages update.  
   
 * More documentation

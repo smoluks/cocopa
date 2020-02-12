@@ -16,6 +16,7 @@ import {
     CCppPropertiesCppStandard,
 } from "./CCppPropertiesConfiguration";
 import {CCppPropertiesConfigurationResult} from "./CCppPropertiesConfigurationResult";
+import {lineSplitRegEx} from "./BuiltInInfoParserGcc";
 
 export {
     Runner,
@@ -32,6 +33,7 @@ export {
     CCppPropertiesCppStandard,
     CCppPropertiesMergeMode,
     arraysEqual,
+    lineSplitRegEx,
     regExEscape,
     removeDuplicatesFrom,
 };
