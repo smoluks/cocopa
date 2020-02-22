@@ -22,9 +22,16 @@ import * as cp from "child_process";
 import {BuiltInInfoParser, IBuiltInInfo} from "./BuiltInInfoParser";
 import {lineSplitRegEx} from "./helpers";
 
-enum GccGetBuiltIn {
+export enum GccGetBuiltIn {
     Includes = "",
     Defines = "-dM",
+}
+
+export function gccGetBuiltInCmd(exe: string, what: GccGetBuiltIn) {
+    return os.platform() === "win32"
+        ? // changing to codepage 65001 (utf8 on Windoze)
+          `chcp 65001>nul && "${exe}" -xc++ ${what} -E -v - < nul 2>&1`
+        : `bash -c "\\"${exe}\\" -xc++ ${what} -E -v - < /dev/null 2>&1"`;
 }
 
 /**
@@ -50,14 +57,8 @@ enum GccGetBuiltIn {
  * @see https://support.microsoft.com/en-us/help/110930/redirecting-error-messages-from-command-prompt-stderr-stdout
  */
 export function gccGetBuiltIn(exe: string, what: GccGetBuiltIn) {
-    const cmd =
-        os.platform() === "win32"
-            ? // changing to codepage 65001 (utf8 on Windoze)
-              `chcp 65001>nul && "${exe}" -xc++ ${what} -E -v - < nul 2>&1`
-            : `bash -c "\\"${exe}\\" -xc++ ${what} -E -v - < /dev/null 2>&1"`;
-
     try {
-        return cp.execSync(cmd, {encoding: "utf8"});
+        return cp.execSync(gccGetBuiltInCmd(exe, what), {encoding: "utf8"});
     } catch (e) {
         return undefined;
     }

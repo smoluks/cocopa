@@ -60,6 +60,8 @@ function makeConf(name: string = makeRandomString(), N: number = 1) {
     return r;
 }
 
+jest.mock("fs");
+
 /**
  *
  */

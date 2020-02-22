@@ -20,10 +20,9 @@ import * as cp from "child_process";
 
 import {stimulusRawFor} from "./common";
 
-type SpawnSyncSpyCallback = (
-    command: string,
-    args?: ReadonlyArray<string>,
-    options?: cp.SpawnSyncOptionsWithStringEncoding,
+type ExecSyncSpyCallback = (
+    c: string,
+    o?: cp.ExecSyncOptionsWithStringEncoding | undefined,
 ) => void;
 
 /**
@@ -32,9 +31,9 @@ type SpawnSyncSpyCallback = (
  * file.
  *
  */
-export function makeSpawnSyncSpy(
+export function makeExecSyncSpy(
     stimulusFile: string,
-    onCall?: SpawnSyncSpyCallback,
+    onCall?: ExecSyncSpyCallback,
 ) {
     /*
      * https://github.com/DefinitelyTyped/DefinitelyTyped/issues/34889
@@ -43,31 +42,20 @@ export function makeSpawnSyncSpy(
      * This is due to fs.readFile having overloads declared. When asked to retrieve parameters of an overloaded method, TS will retrieve them from the last overload because it's usually the least specific. This is not the case for fs.readFile however.
      * Note: arguments must match as we kill inference
      */
-    const _spawnSyncMock = (
-        command: string,
-        args?: ReadonlyArray<string>,
-        options?: cp.SpawnSyncOptionsWithStringEncoding,
+    const _execSyncMock = (
+        c: string,
+        o?: cp.ExecSyncOptionsWithStringEncoding | undefined,
     ) => {
         if (onCall) {
-            onCall(command, args, options);
+            onCall(c, o);
         }
-        const stdout = stimulusRawFor(stimulusFile);
-
-        return {
-            error: undefined,
-            output: [""],
-            pid: 0,
-            signal: "",
-            status: 0,
-            stderr: "",
-            stdout: stdout,
-        } as cp.SpawnSyncReturns<string>;
+        return stimulusRawFor(stimulusFile);
     };
 
-    const spawnSyncMock = _spawnSyncMock as typeof cp.spawnSync;
-    const spawnSyncSpy = jest
-        .spyOn(cp, "spawnSync")
-        .mockImplementation(spawnSyncMock);
+    const execSyncMock = _execSyncMock as typeof cp.execSync;
+    const execSyncSpy = jest
+        .spyOn(cp, "execSync")
+        .mockImplementation(execSyncMock);
 
-    return spawnSyncSpy;
+    return execSyncSpy;
 }
