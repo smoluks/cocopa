@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import * as path from "path";
+
 /**
  * Data structure carrying the output from a parsed compiler command.
  * All compiler specific option prefixes are removed for includes and
@@ -28,4 +30,15 @@ export class Result {
     compiler: string = "";
     /** Dropped arguments like -c -Ox -o, the input and output file. */
     trash: string[] = [];
+
+    /**
+     * Normalize all paths (currently include paths).
+     */
+    public normalize() {
+        const res: string[] = [];
+        for (let i of this.includes) {
+            res.push(path.normalize(i));
+        }
+        this.includes = res;
+    }
 }
