@@ -6,6 +6,8 @@ import {
     makeBuiltInInfoParserGccShellArgs,
 } from "../BuiltInInfoParserGcc";
 
+// todo: mock os.platform to test windows implementation
+
 test(`compiler built-in info parser`, () => {
     const exe = "mock-g++";
 
