@@ -6,7 +6,7 @@
  */
 export interface IBuiltInInfo {
     includes: string[];
-    defines: string[]
+    defines: string[];
 }
 
 /**

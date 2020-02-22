@@ -1,9 +1,9 @@
-import * as shlex from "shlex"
+import * as shlex from "shlex";
 
 import {Result} from "./Result";
 import {Parser} from "./Parser";
 import {BuiltInInfoParserGcc} from "./BuiltInInfoParserGcc";
-import { IParserTrigger } from "./helpers";
+import {IParserTrigger} from "./helpers";
 
 /**
  *  Compiler command parsing engine for gcc compilers.
@@ -13,11 +13,9 @@ export class ParserGcc extends Parser {
         super(trigger, new BuiltInInfoParserGcc());
     }
     protected parse(line: string): Result {
-
         const result = new Result();
 
         for (let arg of shlex.split(line)) {
-
             // drop empty arguments
             if (!arg.length) {
                 continue;
@@ -37,7 +35,7 @@ export class ParserGcc extends Parser {
                 arg = packed[1];
                 // revert escaped quotes inside the quoted arguments
                 arg = arg.replace(/\\"/g, '"');
-            }            
+            }
 
             // extract defines
             const define = arg.match(/^-D(.+)/);

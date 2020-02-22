@@ -1,13 +1,12 @@
+import * as os from "os";
+import * as cp from "child_process";
 
-import * as os from "os"
-import * as cp from "child_process"
-
-import { BuiltInInfoParser, IBuiltInInfo } from "./BuiltInInfoParser";
-import { lineSplitRegEx } from "./helpers";
+import {BuiltInInfoParser, IBuiltInInfo} from "./BuiltInInfoParser";
+import {lineSplitRegEx} from "./helpers";
 
 enum GccGetBuiltIn {
     Includes = "",
-    Defines = "-dM"
+    Defines = "-dM",
 }
 
 /**
@@ -20,7 +19,7 @@ enum GccGetBuiltIn {
  * windows' command prompt (cmd) window:
  *
  *   cmd /c chcp 65001 && "C:\\Program Files (x86)\\<..>\\avr/bin/avr-g++" -xc++ -E -v - < nul 2>&1
- * 
+ *
  *  but not when when passing it to spawn like this:
  *
  *   spawnSync("cmd", "/c", 'chcp 65001 && "C:\\Program Files (x86)\\<..>\\avr/bin/avr-g++" -xc++ -E -v - < nul 2>&1');
@@ -33,11 +32,11 @@ enum GccGetBuiltIn {
  * @see https://support.microsoft.com/en-us/help/110930/redirecting-error-messages-from-command-prompt-stderr-stdout
  */
 export function gccGetBuiltIn(exe: string, what: GccGetBuiltIn) {
-
-    const cmd = os.platform() === "win32" ?
-        // changing to codepage 65001 (utf8 on Windoze)
-        `chcp 65001>nul && "${exe}" -xc++ ${what} -E -v - < nul 2>&1`   :
-        `bash -c "\\"${exe}\\" -xc++ ${what} -E -v - < /dev/null 2>&1"` ;
+    const cmd =
+        os.platform() === "win32"
+            ? // changing to codepage 65001 (utf8 on Windoze)
+              `chcp 65001>nul && "${exe}" -xc++ ${what} -E -v - < nul 2>&1`
+            : `bash -c "\\"${exe}\\" -xc++ ${what} -E -v - < /dev/null 2>&1"`;
 
     try {
         return cp.execSync(cmd, {encoding: "utf8"});
@@ -61,7 +60,6 @@ export class BuiltInInfoParserGcc extends BuiltInInfoParser {
      * @param exe Path to compiler executable.
      */
     private _includes(exe: string): string[] {
-
         const stdout = gccGetBuiltIn(exe, GccGetBuiltIn.Includes);
         if (!stdout) {
             return [];
@@ -102,7 +100,6 @@ export class BuiltInInfoParserGcc extends BuiltInInfoParser {
      * @param exe Path to compiler executable.
      */
     private _defines(exe: string): string[] {
-
         const stdout = gccGetBuiltIn(exe, GccGetBuiltIn.Defines);
         if (!stdout) {
             return [];

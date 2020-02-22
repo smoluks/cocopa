@@ -55,9 +55,10 @@ export enum TriggerTarget {
  * retrieved for.
  * @param platform The platform (OS) this trigger will operate on.
  */
-export function getTriggerFor(target: TriggerTarget,
-                              platform?: string) : IParserTrigger {
-
+export function getTriggerFor(
+    target: TriggerTarget,
+    platform?: string,
+): IParserTrigger {
     let matchPattern: (string | RegExp)[] = [];
     let dontMatchPattern: (string | RegExp)[] = [];
 
@@ -76,16 +77,14 @@ export function getTriggerFor(target: TriggerTarget,
                 /-o\s+"{0,1}(?:\\"|[^"])+\.ino\.cpp\.o"{0,1}/,
             ];
             dontMatchPattern =
-                platform !== "win32"      ?
-                [ /-o\s\/dev\/null/    ]  :
-                [ /-o\snul/            ]  ;
+                platform !== "win32" ? [/-o\s\/dev\/null/] : [/-o\snul/];
             break;
     }
 
     return {
         match: matchPattern,
         dontmatch: dontMatchPattern,
-    }
+    };
 }
 
 /**
@@ -100,7 +99,9 @@ export function getTriggerForArduinoGcc(sketch: string, platform?: string) {
     // /-o\s+"{0,1}(?:\\"|[^"])+\.ino\.cpp\.o"{0,1}/,
 
     const dotcpp = sketch.endsWith(".ino") ? ".cpp" : "";
-    sketch = `-o\\s+"{0,1}?(?:\\"|[^"])*?${regExEscape(sketch)}${dotcpp}\\.o"{0,1}?`;
+    sketch = `-o\\s+"{0,1}?(?:\\"|[^"])*?${regExEscape(
+        sketch,
+    )}${dotcpp}\\.o"{0,1}?`;
 
     const trigger = getTriggerFor(TriggerTarget.ArduinoGpp, platform);
 

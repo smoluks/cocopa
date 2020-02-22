@@ -6,7 +6,7 @@ import {
     lineSplitRegEx,
     TriggerTarget,
     regExEscape,
-    removeDuplicatesFrom
+    removeDuplicatesFrom,
 } from "./helpers";
 import {Parser} from "./Parser";
 import {Runner} from "./Runner";

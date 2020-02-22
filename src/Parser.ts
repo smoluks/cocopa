@@ -1,6 +1,6 @@
 import {Result} from "./Result";
 import {BuiltInInfoParser} from "./BuiltInInfoParser";
-import { IParserTrigger } from "./helpers";
+import {IParserTrigger} from "./helpers";
 
 /**
  * Base class for any compiler command parser engine.
@@ -18,7 +18,7 @@ export abstract class Parser {
      * For performance reasons: place easy to test and frequent tests
      * first and rare/expensive cases last for better performance.
      */
-//    private _match: (string | RegExp)[];
+    //    private _match: (string | RegExp)[];
     /**
      * This array should contain the patterns which should _NOT_
      * match on a valid compiler command line to identify the
@@ -28,7 +28,7 @@ export abstract class Parser {
      * For performance reasons: place easy to test and frequent tests
      * first and rare/expensive cases last for better performance.
      */
-//    private _dontMatch: (string | RegExp)[];
+    //    private _dontMatch: (string | RegExp)[];
     /**
      *
      */

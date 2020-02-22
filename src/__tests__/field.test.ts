@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import {stimulusRawFor, stimuliDir} from "./common";
-import {getTriggerFor, lineSplitRegEx, TriggerTarget} from "../helpers"
+import {getTriggerFor, lineSplitRegEx, TriggerTarget} from "../helpers";
 import {ParserGcc} from "../ParserGcc";
 import {Runner} from "../Runner";
 import {fail} from "assert";
@@ -12,7 +12,6 @@ const platformOsx = "osx";
 const platformWin = "win";
 
 for (const file of fs.readdirSync(path.join(stimuliDir, fieldDir))) {
-    
     const stat = fs.lstatSync(path.join(stimuliDir, fieldDir, file));
     if (stat.isDirectory()) {
         continue;
@@ -23,11 +22,11 @@ for (const file of fs.readdirSync(path.join(stimuliDir, fieldDir))) {
         let platform: string;
 
         if (file.startsWith(`${platformLinux}.`)) {
-            platform = 'linux';
+            platform = "linux";
         } else if (file.startsWith(`${platformOsx}.`)) {
-            platform = 'darwin';
+            platform = "darwin";
         } else if (file.startsWith(`${platformWin}.`)) {
-            platform = 'win32';
+            platform = "win32";
         } else {
             fail(`unknown test vector ${file}`);
         }
