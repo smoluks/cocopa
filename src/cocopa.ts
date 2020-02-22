@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// This is a CLI - therefore allowing console.log
+// tslint:disable:no-console
+
 /**
  * COCOPA CLI
  */
@@ -8,10 +11,11 @@ import chalk, {Chalk} from "chalk";
 
 import {existsSync, readFileSync, writeFileSync} from "fs";
 import {relative, resolve} from "path";
-//import { compile } from 'gitignore-parser';
+// import { compile } from 'gitignore-parser';
 import program from "commander";
-//import glob from 'glob';
-const pkg = require("../package.json");
+// import glob from 'glob';
+
+import pkg = require("../package.json");
 
 program
     .version(pkg.version)
@@ -53,11 +57,11 @@ const options: CocopaOptions = (program as unknown) as CocopaOptions;
 // and stderr, so the appropriate chalk instance has to be injected.
 type LogConstructor = (chalk: Chalk) => string;
 
-export const logBuilder = (options: CocopaOptions, errorLog = false) => (
+export const logBuilder = (opts: CocopaOptions, errLog = false) => (
     logConstructor: LogConstructor,
 ) => {
-    if (!options.silent) {
-        if (errorLog || options.stdout) {
+    if (!opts.silent) {
+        if (errLog || opts.stdout) {
             // as we're putting the resulting file out of stdout, we redirect the logs to stderr so they can still be seen,
             // but won't be piped
             console.error(logConstructor(chalk.stderr));
@@ -70,7 +74,7 @@ export const logBuilder = (options: CocopaOptions, errorLog = false) => (
 const log = logBuilder(options);
 const errorLog = logBuilder(options, true);
 
-let sourceFiles = []; /*sourceFilesInput.reduce<string[]>((files, file) => {
+const sourceFiles = []; /*sourceFilesInput.reduce<string[]>((files, file) => {
     if (glob.hasMagic(file)) {
       files.push(...glob.sync(file));
     } else {
@@ -82,19 +86,19 @@ let sourceFiles = []; /*sourceFilesInput.reduce<string[]>((files, file) => {
   */
 
 if (sourceFiles.length > 1) {
-    log(chalk =>
-        chalk.yellow(
+    log(clk =>
+        clk.yellow(
             `More than one file matched your input, results will be concatenated in stdout`,
         ),
     );
 } else if (sourceFiles.length === 0) {
-    log(chalk => chalk.yellow(`No files matched your input`));
+    log(clk => clk.yellow(`No files matched your input`));
     process.exit(0);
 }
 
 if (options.stripEmbedComment && !options.stdout) {
-    errorLog(chalk =>
-        chalk.red(
+    errorLog(clk =>
+        clk.red(
             `If you use the --strip-embed-comment flag, you must use the --stdout flag and redirect the result to your destination file, otherwise your source file(s) will be rewritten and comment source is lost.`,
         ),
     );
@@ -102,11 +106,11 @@ if (options.stripEmbedComment && !options.stdout) {
 }
 
 if (options.verify) {
-    log(chalk => chalk.blue(`Verifying...`));
+    log(clk => clk.blue(`Verifying...`));
 } else if (options.dryRun) {
-    log(chalk => chalk.blue(`Doing a dry run...`));
+    log(clk => clk.blue(`Doing a dry run...`));
 } else if (options.stdout) {
-    log(chalk => chalk.blue(`Outputting to stdout...`));
+    log(clk => clk.blue(`Outputting to stdout...`));
 } else {
-    log(chalk => chalk.blue(`Embedding...`));
+    log(clk => clk.blue(`Embedding...`));
 }

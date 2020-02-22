@@ -1,4 +1,13 @@
-import {arraysEqual, regExEscape, removeDuplicatesFrom} from "./helpers";
+import {
+    arraysEqual,
+    getTriggerFor,
+    getTriggerForArduinoGcc,
+    IParserTrigger,
+    lineSplitRegEx,
+    TriggerTarget,
+    regExEscape,
+    removeDuplicatesFrom
+} from "./helpers";
 import {Parser} from "./Parser";
 import {Runner} from "./Runner";
 import {Result} from "./Result";
@@ -16,7 +25,6 @@ import {
     CCppPropertiesCppStandard,
 } from "./CCppPropertiesConfiguration";
 import {CCppPropertiesConfigurationResult} from "./CCppPropertiesConfigurationResult";
-import {lineSplitRegEx} from "./BuiltInInfoParserGcc";
 
 export {
     Runner,
@@ -33,6 +41,10 @@ export {
     CCppPropertiesCppStandard,
     CCppPropertiesMergeMode,
     arraysEqual,
+    IParserTrigger,
+    getTriggerFor,
+    getTriggerForArduinoGcc,
+    TriggerTarget,
     lineSplitRegEx,
     regExEscape,
     removeDuplicatesFrom,

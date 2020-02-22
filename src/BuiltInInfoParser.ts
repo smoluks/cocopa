@@ -1,4 +1,13 @@
-import {spawnSync} from "child_process";
+/**
+ * Return value of any BuiltInInfoParser.
+ * Contains the includes and other data which are intrinsically
+ * known to the compiler without having to specify them explicitly
+ * as includes etc. on the command line.
+ */
+export interface IBuiltInInfo {
+    includes: string[];
+    defines: string[]
+}
 
 /**
  * Classes of this type query compilers about their built-in
@@ -14,27 +23,5 @@ export abstract class BuiltInInfoParser {
         return this._enabled;
     }
 
-    public abstract info(
-        executable: string,
-    ): {includes: string[]; defines: string[]} | undefined;
-
-    /**
-     * Runs a query command on the system.
-     * @param cmd Command to run
-     * @param args Command arguments
-     * @returns The query command's result strings of stdout and stderr on success, else undefined.
-     */
-    protected runQuery(
-        cmd: string,
-        args: string[],
-    ): {stdout: string; stderr: string} | undefined {
-        const child = spawnSync(cmd, args, {encoding: "utf8"});
-        if (child.error || child.status !== 0) {
-            return undefined;
-        }
-        return {
-            stdout: child.stdout,
-            stderr: child.stderr,
-        };
-    }
+    public abstract info(executable: string): IBuiltInInfo | undefined;
 }

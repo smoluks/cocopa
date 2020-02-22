@@ -1,5 +1,5 @@
 # cocopa - Compiler Command Parser
-A parser to extract include directories, defines, arguments from compiler command line invocations and can extract the compiler's built-in configuration.
+A parser to extract include directories, defines, arguments from a compiler's command line invocation and its built-in configuration.
 
 &nbsp;&nbsp;&nbsp;&nbsp;**This is work in progress as long you read this message -- be prepared for heavy API changes**
 
@@ -20,19 +20,22 @@ A parser to extract include directories, defines, arguments from compiler comman
   * :heavy_check_mark: Merging of parsing result and existing file content
   * :heavy_check_mark: Handling inexistent files and folders
   * :heavy_check_mark: Write configuration on change only
-  * :white_check_mark: X-platform support
+  * :heavy_check_mark: X-platform support
   * :white_check_mark: Option to backup old configurations?
   * Unit testing:
-    * :heavy_check_mark: Use mocked gcc to test built-in info parser and test if it generates a valid list
+    * :white_check_mark: Use mocked gcc to test built-in info parser and test if it generates a valid list (this is currently broken - the latest jest broke it)
     * :heavy_check_mark: Test parser for compiler built-in info 
-    * :white_check_mark: Tests for compile output of all known arduino platforms
+    * :heavy_check_mark: Tests for compile output of all known arduino platforms (see field test)
     * :white_check_mark: Throwing arbitrary data at parser engines
     * :white_check_mark: JSON input
     * :white_check_mark: JSON output
     * :white_check_mark: Configuration merging
 * Later:
+  * normalize include and other paths before returning them
+  * option to turn built-in defines/includes on or off
   * [Migrate to ESLint](https://code.visualstudio.com/api/advanced-topics/tslint-eslint-migration)
   * Rewrite file and child process calls to be async
+  * Repository/node tags
 
 ## Publishing
 ```bash

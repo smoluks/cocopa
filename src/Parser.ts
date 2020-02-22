@@ -1,5 +1,6 @@
 import {Result} from "./Result";
 import {BuiltInInfoParser} from "./BuiltInInfoParser";
+import { IParserTrigger } from "./helpers";
 
 /**
  * Base class for any compiler command parser engine.
@@ -8,6 +9,7 @@ import {BuiltInInfoParser} from "./BuiltInInfoParser";
  * CompilerCmdParserEngineGcc.
  */
 export abstract class Parser {
+    private _trigger: IParserTrigger;
     /**
      * This array should contain the patterns which should match on
      * a valid compiler command line to identify the compiler command.
@@ -16,7 +18,7 @@ export abstract class Parser {
      * For performance reasons: place easy to test and frequent tests
      * first and rare/expensive cases last for better performance.
      */
-    private _match: (string | RegExp)[];
+//    private _match: (string | RegExp)[];
     /**
      * This array should contain the patterns which should _NOT_
      * match on a valid compiler command line to identify the
@@ -26,7 +28,7 @@ export abstract class Parser {
      * For performance reasons: place easy to test and frequent tests
      * first and rare/expensive cases last for better performance.
      */
-    private _dontMatch: (string | RegExp)[];
+//    private _dontMatch: (string | RegExp)[];
     /**
      *
      */
@@ -43,12 +45,10 @@ export abstract class Parser {
      * @param infoParser
      */
     constructor(
-        match: (string | RegExp)[],
-        dontMatch: (string | RegExp)[],
+        trigger: IParserTrigger,
         infoParser?: BuiltInInfoParser | undefined,
     ) {
-        this._match = match;
-        this._dontMatch = dontMatch;
+        this._trigger = trigger;
         this._infoParser = infoParser;
     }
     /**
@@ -74,14 +74,14 @@ export abstract class Parser {
      */
     public match(line: string): Result | undefined {
         // check search queries that must match
-        for (const re of this._match) {
+        for (const re of this._trigger.match) {
             if (line.search(re) === -1) {
                 return undefined;
             }
         }
 
         // check search queries that mustn't match
-        for (const re of this._dontMatch) {
+        for (const re of this._trigger.dontmatch) {
             if (line.search(re) !== -1) {
                 return undefined;
             }

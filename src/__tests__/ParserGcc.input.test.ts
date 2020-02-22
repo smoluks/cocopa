@@ -44,8 +44,9 @@ for (const stimFileName of fs.readdirSync(stimuliDir)) {
             // make sure Arduino's not testing libraries
             /-o\s\/dev\/null/,
         ];
+        const trigger = {match: matchPattern, dontmatch: dontMatchPattern};
 
-        const gpp = new ParserGcc(matchPattern, dontMatchPattern);
+        const gpp = new ParserGcc(trigger);
 
         // disable info parser for test bench, since most of the compilers
         // won't be available on the test system
