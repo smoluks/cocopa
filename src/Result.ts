@@ -36,7 +36,7 @@ export class Result {
      */
     public normalize() {
         const res: string[] = [];
-        for (let i of this.includes) {
+        for (const i of this.includes) {
             res.push(path.normalize(i));
         }
         this.includes = res;
