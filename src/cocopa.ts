@@ -15,7 +15,8 @@ import {relative, resolve} from "path";
 import program from "commander";
 // import glob from 'glob';
 
-import pkg = require("../package.json");
+const pkgraw = readFileSync("../package.json", {encoding: "utf8"});
+const pkg = JSON.parse(pkgraw);
 
 program
     .version(pkg.version)
