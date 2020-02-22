@@ -9,6 +9,7 @@
     "testonly": "jest --config jestconfig.json",
     "build": "tsc",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "prettier-check": "prettier --check \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
