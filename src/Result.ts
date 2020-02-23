@@ -32,12 +32,19 @@ export class Result {
     trash: string[] = [];
 
     /**
-     * Normalize all paths (currently include paths).
+     * Normalize all paths which are: include paths and the path of the
+     * compiler executable.
+     * Removes empty include paths if any.
      */
     public normalize() {
+        if (this.compiler) {
+            this.compiler = path.normalize(this.compiler);
+        }
         const res: string[] = [];
         for (const i of this.includes) {
-            res.push(path.normalize(i));
+            if (i) {
+                res.push(path.normalize(i));
+            }
         }
         this.includes = res;
     }
