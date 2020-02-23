@@ -58,6 +58,13 @@ export class CCppPropertiesContent {
 
     configurations: CCppPropertiesConfiguration[];
 
+    /**
+     * Version of the c_cpp_properties.json format.
+     * TODO: on the long run we should test the format on loading
+     * and take appropriate measures for different versions
+     */
+    readonly version: number = 4;
+
     constructor(configurations: CCppPropertiesConfiguration[] = []) {
         this.configurations = configurations;
     }

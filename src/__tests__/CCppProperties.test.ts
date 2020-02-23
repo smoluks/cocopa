@@ -23,6 +23,7 @@ import {
     CCppPropertiesContent,
     CCppPropertiesMergeMode,
 } from "../CCppPropertiesContent";
+import {CCppPropertiesContentResult} from "../CCppPropertiesContentResult";
 import {
     CCppPropertiesConfiguration,
     CCppPropertiesISMode,
@@ -34,6 +35,7 @@ import {
     makeRandomStringArray,
     randomEnumItem,
 } from "./common";
+import {Result} from "../Result";
 
 /**
  *
@@ -66,11 +68,21 @@ jest.mock("fs");
  *
  */
 test(`CCppProperties write`, () => {
+    let fileData = "";
+
     const fsExistsSyncSpy = jest.spyOn(fs, "existsSync").mockReturnValue(false);
     const fsMkdirSyncSpy = jest.spyOn(fs, "mkdirSync").mockReturnValue();
     const fsWriteFileSyncSpy = jest
         .spyOn(fs, "writeFileSync")
-        .mockReturnValue();
+        .mockImplementation(
+            (
+                path: string | number | Buffer | URL,
+                data: any,
+                options?: fs.WriteFileOptions,
+            ) => {
+                fileData = data as string;
+            },
+        );
 
     const fakepath = path.join("this path does not exist", "fake.json");
 
@@ -79,7 +91,21 @@ test(`CCppProperties write`, () => {
     // we didn't call read - content must be undefined
     expect(p.content).toBeUndefined();
 
-    const pc = new CCppPropertiesContent();
+    // TODO: test multiple configurations
+    const result = new Result();
+    result.compiler = "g++";
+    result.includes = ["/a/b", "/c/d"];
+    result.defines = ['MYDEFINE="hello"', "ANOTHER", "CONSTANT=1"];
+    result.options = ["-std=gnu++11", "-Wall"];
+    result.trash = ["source.ino.cpp", "-o"];
+    const pc = new CCppPropertiesContentResult(
+        result,
+        "test",
+        CCppPropertiesISMode.Gcc_X64,
+        CCppPropertiesCStandard.C11,
+        CCppPropertiesCppStandard.Cpp11,
+        ["forced/include"],
+    );
 
     expect(p.changed).toBe(false);
 
@@ -100,6 +126,24 @@ test(`CCppProperties write`, () => {
 
     expect(fsWriteFileSyncSpy).toHaveBeenCalledTimes(1);
     expect(fsWriteFileSyncSpy).toBeCalledWith(fakepath, p.stringyfy());
+
+    const expectedFileContent = {
+        version: 4,
+        configurations: [
+            {
+                name: "test",
+                compilerPath: "g++",
+                compilerArgs: ["-std=gnu++11", "-Wall"],
+                intelliSenseMode: "gcc-x64",
+                includePath: ["/a/b", "/c/d"],
+                forcedInclude: ["forced/include"],
+                cStandard: "c11",
+                cppStandard: "c++11",
+                defines: ['MYDEFINE="hello"', "ANOTHER", "CONSTANT=1"],
+            },
+        ],
+    };
+    expect(fileData).toBe(JSON.stringify(expectedFileContent, null, 4));
 
     fsExistsSyncSpy.mockClear();
     fsMkdirSyncSpy.mockClear();
@@ -171,7 +215,7 @@ test(`CCppProperties merge`, () => {
     );
 
     ////
-    // Test CCppPropertiesMergeMode.Complement
+    // TODO: Test CCppPropertiesMergeMode.Complement
     //
 
     // test if it doesn't modify if source contains empty values

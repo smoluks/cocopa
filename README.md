@@ -23,13 +23,13 @@ A parser to extract include directories, defines, arguments from a compiler's co
   * :heavy_check_mark: X-platform support
   * :white_check_mark: Option to backup old configurations?
   * Unit testing:
-    * :white_check_mark: Use mocked gcc to test built-in info parser and test if it generates a valid list (this is currently broken - the latest jest broke it)
+    * :heavy_check_mark: Use mocked gcc and child_process.execSync to test built-in info parser
     * :heavy_check_mark: Test parser for compiler built-in info 
     * :heavy_check_mark: Tests for compile output of all known arduino platforms (see field test)
-    * :white_check_mark: Throwing arbitrary data at parser engines
     * :white_check_mark: JSON input
-    * :white_check_mark: JSON output
-    * :white_check_mark: Configuration merging
+    * :heavy_check_mark: JSON output
+    * :heavy_check_mark: Configuration merging
+    * :white_check_mark: Throwing arbitrary data at parser engines
 * Later:
   * normalize include and other paths before returning them
   * option to turn built-in defines/includes on or off
