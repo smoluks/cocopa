@@ -132,19 +132,18 @@ export class BuiltInInfoParserGcc extends BuiltInInfoParser {
         // #define __UINT32_T unsigned long
         // #define __FLT128_DECIMAL_DIG__ 36
 
-        const defineregex = /#define\s+(\S+)(?:\s*(.+)|\s*?)/g;
+        const defineregex = /#define\s+(\S+)(?:\s*(.+)|\s*?)/;
         const defines: string[] = [];
 
         for (const line of stdout.split(lineSplitRegEx())) {
             const match = defineregex.exec(line);
             if (match) {
-                switch (match.length) {
-                    case 3:
-                        defines.push(`${match[1]}=${match[2]}`);
-                        break;
-                    case 2:
-                        defines.push(match[1]);
-                        break;
+                // Note: optional capturing groups will be always
+                // present in match but undefined if they didn't match
+                if (match[2]) {
+                    defines.push(`${match[1]}=${match[2]}`);
+                } else if (match[1]) {
+                    defines.push(match[1]);
                 }
             }
         }

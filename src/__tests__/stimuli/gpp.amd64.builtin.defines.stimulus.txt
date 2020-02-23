@@ -1,0 +1,10 @@
+#define __DBL_MIN_EXP__ (-1021)
+#define __MY_TYPE unsigned long long
+#define __FLT32X_MAX_EXP__ 1024
+#define __cpp_attributes 200809
+#define __UINT_LEAST16_MAX__ 0xffff
+#define __ATOMIC_ACQUIRE 2
+#define __FLT128_MAX_10_EXP__ 4932
+#define PLAIN_DEFINE
+#define PLAIN_DEFINE_SPACE 
+#define LAST_DEFINE_NO_EOL 3

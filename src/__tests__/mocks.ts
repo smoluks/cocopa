@@ -32,7 +32,7 @@ type ExecSyncSpyCallback = (
  *
  */
 export function makeExecSyncSpy(
-    stimulusFile: string,
+    stimulus?: {file: string; pattern?: string}[],
     onCall?: ExecSyncSpyCallback,
 ) {
     /*
@@ -49,7 +49,14 @@ export function makeExecSyncSpy(
         if (onCall) {
             onCall(c, o);
         }
-        return stimulusRawFor(stimulusFile);
+        if (stimulus) {
+            for (const s of stimulus) {
+                if (!s.pattern || c.indexOf(s.pattern) >= 0) {
+                    return stimulusRawFor(s.file);
+                }
+            }
+        }
+        return "";
     };
 
     const execSyncMock = _execSyncMock as typeof cp.execSync;

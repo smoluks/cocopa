@@ -25,34 +25,24 @@ import {gccGetBuiltInCmd, GccGetBuiltIn} from "../BuiltInInfoParserGcc";
 jest.mock("child_process");
 jest.mock("os");
 
-// TODO: defines parsing
-
 for (const platform of ["win32", "darwin", "linux"]) {
     test(`compiler built-in info parser on ${platform}`, () => {
         const exe = "mock-g++";
 
-        jest.spyOn(os, "platform").mockReturnValue(platform as NodeJS.Platform);
+        const osPlatformSpy = jest
+            .spyOn(os, "platform")
+            .mockReturnValue(platform as NodeJS.Platform);
 
-        const gccCallCallback = (
-            command: string,
-            options?: cp.ExecSyncOptionsWithStringEncoding,
-        ) => {
-            const cmd =
-                command.indexOf(GccGetBuiltIn.Defines) >= 0
-                    ? gccGetBuiltInCmd(exe, GccGetBuiltIn.Defines)
-                    : gccGetBuiltInCmd(exe, GccGetBuiltIn.Includes);
-            expect(command).toBe(cmd);
-            if (options) {
-                expect(options.encoding).toBe("utf8");
-            } else {
-                fail("must be called with encoding option");
-            }
-        };
-
-        const execSyncSpy = makeExecSyncSpy(
-            "gpp.amd64.builtin.stimulus.txt",
-            gccCallCallback,
-        );
+        const execSyncSpy = makeExecSyncSpy([
+            {
+                file: "gpp.amd64.builtin.includes.stimulus.txt",
+                pattern: gccGetBuiltInCmd(exe, GccGetBuiltIn.Includes),
+            },
+            {
+                file: "gpp.amd64.builtin.defines.stimulus.txt",
+                pattern: gccGetBuiltInCmd(exe, GccGetBuiltIn.Defines),
+            },
+        ]);
 
         const testFile = "test.cpp";
         const cmd = `${exe} -c -o ${testFile}.o ${testFile}`;
@@ -78,7 +68,7 @@ for (const platform of ["win32", "darwin", "linux"]) {
             fail("compiler command line did not trigger");
         }
 
-        // Manually extracted includes from stimulus
+        // Manually extracted includes and defines from stimulus
         const includes = [
             "/usr/include/c++/7",
             "/usr/include/x86_64-linux-gnu/c++/7",
@@ -89,6 +79,18 @@ for (const platform of ["win32", "darwin", "linux"]) {
             "/usr/include/x86_64-linux-gnu",
             "/usr/include",
         ];
+        const defines = [
+            "__DBL_MIN_EXP__=(-1021)",
+            "__MY_TYPE=unsigned long long",
+            "__FLT32X_MAX_EXP__=1024",
+            "__cpp_attributes=200809",
+            "__UINT_LEAST16_MAX__=0xffff",
+            "__ATOMIC_ACQUIRE=2",
+            "__FLT128_MAX_10_EXP__=4932",
+            "PLAIN_DEFINE",
+            "PLAIN_DEFINE_SPACE",
+            "LAST_DEFINE_NO_EOL=3",
+        ];
         expect(result.compiler).toStrictEqual("mock-g++");
         expect(result.trash).toStrictEqual([
             "-c",
@@ -97,10 +99,12 @@ for (const platform of ["win32", "darwin", "linux"]) {
             testFile,
         ]);
         expect(result.includes).toStrictEqual(includes);
+        expect(result.defines).toStrictEqual(defines);
 
         // once for include, once for defines
         expect(execSyncSpy).toHaveBeenCalledTimes(2);
 
+        osPlatformSpy.mockClear();
         execSyncSpy.mockClear();
     });
 }
