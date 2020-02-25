@@ -82,8 +82,6 @@ export function getTriggerFor(
                 /(?:^|-)g\+\+"{0,1}\s+/,
                 // make sure we're compiling
                 /\s+-c\s+/,
-                // trigger parser when compiling the main sketch
-                /-o\s+"{0,1}(?:\\"|[^"])+\.ino\.cpp\.o"{0,1}/,
             ];
             dontMatchPattern =
                 platform !== "win32" ? [/-o\s\/dev\/null/] : [/-o\snul/];
@@ -107,13 +105,12 @@ export function getTriggerForArduinoGcc(sketch: string, platform?: string) {
     // trigger parser when compiling the main sketch
     // /-o\s+"{0,1}(?:\\"|[^"])+\.ino\.cpp\.o"{0,1}/,
 
-    const dotcpp = sketch.endsWith(".ino") ? ".cpp" : "";
     sketch = `-o\\s+"{0,1}?(?:\\"|[^"])*?${regExEscape(
         sketch,
-    )}${dotcpp}\\.o"{0,1}?`;
+    )}\\.cpp\\.o"{0,1}?`;
 
     const trigger = getTriggerFor(TriggerTarget.ArduinoGpp, platform);
 
-    trigger.match.push(sketch);
+    trigger.match.push(RegExp(sketch));
     return trigger;
 }
