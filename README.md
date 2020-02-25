@@ -21,17 +21,16 @@ A parser to extract include directories, defines, arguments from a compiler's co
   * :heavy_check_mark: Handling inexistent files and folders
   * :heavy_check_mark: Write configuration on change only
   * :heavy_check_mark: X-platform support
-  * :white_check_mark: Option to backup old configurations?
+  * :heavy_check_mark: normalize include and other paths before returning them
   * Unit testing:
     * :heavy_check_mark: Use mocked gcc and child_process.execSync to test built-in info parser
     * :heavy_check_mark: Test parser for compiler built-in info 
     * :heavy_check_mark: Tests for compile output of all known arduino platforms (see field test)
-    * :white_check_mark: JSON input
+    * :heavy_check_mark: JSON input
     * :heavy_check_mark: JSON output
     * :heavy_check_mark: Configuration merging
     * :white_check_mark: Throwing arbitrary data at parser engines
 * Later:
-  * normalize include and other paths before returning them
   * option to turn built-in defines/includes on or off
   * [Migrate to ESLint](https://code.visualstudio.com/api/advanced-topics/tslint-eslint-migration)
   * Rewrite file and child process calls to be async

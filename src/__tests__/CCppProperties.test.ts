@@ -150,6 +150,63 @@ test(`CCppProperties write`, () => {
     fsWriteFileSyncSpy.mockClear();
 });
 
+test(`CCppProperties read`, () => {
+    const expectedFileContent = {
+        version: 4,
+        configurations: [
+            {
+                name: "test",
+                compilerPath: "g++",
+                compilerArgs: ["-std=gnu++11", "-Wall"],
+                intelliSenseMode: "gcc-x64",
+                includePath: ["/a/b", "/c/d"],
+                forcedInclude: ["forced/include"],
+                cStandard: "c11",
+                cppStandard: "c++11",
+                defines: ['MYDEFINE="hello"', "ANOTHER", "CONSTANT=1"],
+            },
+        ],
+    };
+    const fakepath = path.join("this path does not exist", "fake.json");
+    const fsReadFileSyncSpy = jest.spyOn(fs, "readFileSync").mockImplementation(
+        (
+            path: string | number | Buffer | URL,
+            options?:
+                | string
+                | {
+                      encoding?: string | null | undefined;
+                      flag?: string | undefined;
+                  }
+                | null
+                | undefined,
+        ) => {
+            expect(path).toBe(fakepath);
+            expect(options as string).toBe("utf8");
+            return JSON.stringify(expectedFileContent, null, 4) as string;
+        },
+    );
+    const fsExistsSyncSpy = jest.spyOn(fs, "existsSync");
+    fsExistsSyncSpy.mockReturnValue(false);
+
+    const p = new CCppProperties();
+    expect(p.read(fakepath)).toBe(false);
+
+    fsExistsSyncSpy.mockReturnValue(true);
+
+    expect(p.read(fakepath)).toBe(true);
+    if (!p.content) {
+        fail("content must exist");
+    }
+    const e = p.content.equals(expectedFileContent as CCppPropertiesContent);
+    expect(e).toBe(true);
+
+    // TODO: test with multiple configurations...
+    // TODO: test with corrupt data
+
+    fsReadFileSyncSpy.mockClear();
+    fsExistsSyncSpy.mockClear();
+});
+
 test(`CCppProperties merge`, () => {
     const p = new CCppProperties();
 
