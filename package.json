@@ -33,7 +33,7 @@
     "intellisense"
   ],
   "author": "Uli Franke -- Elektronik Workshop",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/elektronikworkshop/cocopa/issues"
   },
