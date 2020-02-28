@@ -63,8 +63,7 @@ for (const stimFileName of fs.readdirSync(stimuliDir)) {
 
         const p = new Runner([gpp]);
 
-        // make sure this stimulus triggers the parser
-        expect(p.parse(stimulus.ccmd)).toBe(true);
+        p.parse(stimulus.ccmd);
 
         // a matching vector must result in a result
         if (!p.result) {

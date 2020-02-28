@@ -19,7 +19,7 @@ import {
 } from "./helpers";
 import {Parser} from "./Parser";
 import {Runner} from "./Runner";
-import {Result} from "./Result";
+import {Result, ResultCppStandard} from "./Result";
 import {ParserGcc} from "./ParserGcc";
 import {CCppProperties} from "./CCppProperties";
 import {
@@ -38,6 +38,7 @@ import {CCppPropertiesConfigurationResult} from "./CCppPropertiesConfigurationRe
 export {
     Runner,
     Result,
+    ResultCppStandard,
     Parser,
     ParserGcc,
     CCppProperties,

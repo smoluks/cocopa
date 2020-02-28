@@ -15,11 +15,8 @@ import {Parser} from "./Parser";
  * Takes compiler commands line by line and tries to find the compile command
  * for the main .ino sketch. From that it tries to extract all includes,
  * defines, options and the compiler command itself.
- *
- * TODO: Make it more generic to support other compilers than gcc
  */
 export class Runner {
-    private _result: Result | undefined = undefined;
     private _engines: Parser[] = [];
 
     /**
@@ -36,13 +33,22 @@ export class Runner {
      * parser didn't run.
      */
     get result(): Result | undefined {
-        return this._result;
+        // TODO: in case we have multiple matches within multiple
+        //   parsers...
+        for (const engine of this._engines) {
+            if (engine.result) {
+                return engine.result;
+            }
+        }
+        return undefined;
     }
     /**
-     * Resets the parser by dropping the result.
+     * Resets all parsers by dropping their result.
      */
     public reset() {
-        this._result = undefined;
+        for (const engine of this._engines) {
+            engine.reset();
+        }
     }
     /**
      * Takes a command line and tries to parse it.
@@ -52,27 +58,23 @@ export class Runner {
      * successfully. It returns undefined if no match was found or
      * parsing failed.
      */
-    public parse(line: string): boolean {
+    public parse(line: string) {
+        // TODO: in case we have multiple matches within multiple
+        //   parsers...
         for (const engine of this._engines) {
-            this._result = engine.match(line);
-            if (this._result) {
-                return true;
+            if (!engine.result) {
+                engine.match(line);
             }
         }
-        return false;
     }
     /**
      * Returns a callback which can be passed on to other functions
      * to call. For instance from stdout callbacks of child processes.
      *
-     * @param once If true this callback stops parsing as soon as a
-     * valid result has been generated (to reduce overhead).
      */
-    public callback(once: boolean = true): (line: string) => void {
+    public callback(): (line: string) => void {
         return (line: string) => {
-            if (!this._result || !once) {
-                this.parse(line);
-            }
+            this.parse(line);
         };
     }
 }

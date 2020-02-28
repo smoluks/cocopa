@@ -19,6 +19,7 @@ import {IParserTrigger} from "./helpers";
  */
 export abstract class Parser {
     private _trigger: IParserTrigger;
+    private _result: Result | undefined;
     /**
      * This array should contain the patterns which should match on
      * a valid compiler command line to identify the compiler command.
@@ -45,6 +46,17 @@ export abstract class Parser {
 
     public get infoParser(): BuiltInInfoParser | undefined {
         return this._infoParser;
+    }
+
+    public get result() {
+        return this._result;
+    }
+
+    /**
+     * Resets the parser by dropping the result.
+     */
+    public reset() {
+        this._result = undefined;
     }
 
     /**
@@ -81,39 +93,45 @@ export abstract class Parser {
      * @returns If match was found and parsing was successful
      * it returns the result else undefined.
      */
-    public match(line: string): Result | undefined {
+    public match(line: string) {
+        // As soon as we have a result we're done
+        if (this._result) {
+            return;
+        }
+
         // check search queries that must match
         for (const re of this._trigger.match) {
             if (line.search(re) === -1) {
-                return undefined;
+                return;
             }
         }
 
         // check search queries that mustn't match
         for (const re of this._trigger.dontmatch) {
             if (line.search(re) !== -1) {
-                return undefined;
+                return;
             }
         }
 
         const res = this.parse(line);
 
-        // if parsing was successful, we have an info parser and it
-        // is enabled: try to get compiler built-in info and append
-        // it to the parsing results
-        if (
-            this._infoParser &&
-            this._infoParser.enabled &&
-            res &&
-            res.compiler.length
-        ) {
-            const nfo = this._infoParser.info(res.compiler);
-            if (nfo) {
-                res.includes = [...res.includes, ...nfo.includes];
-                res.defines = [...res.defines, ...nfo.defines];
+        if (res) {
+            // if parsing was successful, we have an info parser and it
+            // is enabled: try to get compiler built-in info and append
+            // it to the parsing results
+            if (
+                this._infoParser &&
+                this._infoParser.enabled &&
+                res.compiler.length
+            ) {
+                const nfo = this._infoParser.info(res.compiler);
+                if (nfo) {
+                    res.includes = [...res.includes, ...nfo.includes];
+                    res.defines = [...res.defines, ...nfo.defines];
+                }
             }
-        }
 
-        return res;
+            this._result = res;
+        }
     }
 }

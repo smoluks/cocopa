@@ -52,9 +52,9 @@ for (const platform of ["win32", "darwin", "linux"]) {
 
         expect(p.infoParser).toBeDefined();
 
-        const result = p.match(cmd);
+        p.match(cmd);
 
-        if (!result) {
+        if (!p.result) {
             fail("compiler command line did not trigger");
         }
 
@@ -81,15 +81,15 @@ for (const platform of ["win32", "darwin", "linux"]) {
             "PLAIN_DEFINE_SPACE",
             "LAST_DEFINE_NO_EOL=3",
         ];
-        expect(result.compiler).toStrictEqual("mock-g++");
-        expect(result.trash).toStrictEqual([
+        expect(p.result.compiler).toStrictEqual("mock-g++");
+        expect(p.result.trash).toStrictEqual([
             "-c",
             "-o",
             `${testFile}.o`,
             testFile,
         ]);
-        expect(result.includes).toStrictEqual(includes);
-        expect(result.defines).toStrictEqual(defines);
+        expect(p.result.includes).toStrictEqual(includes);
+        expect(p.result.defines).toStrictEqual(defines);
 
         // once for include, once for defines
         expect(execSyncSpy).toHaveBeenCalledTimes(2);

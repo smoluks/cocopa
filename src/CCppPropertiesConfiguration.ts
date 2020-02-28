@@ -29,6 +29,7 @@ export enum CCppPropertiesCppStandard {
     Cpp11 = "c++11",
     Cpp14 = "c++14",
     Cpp17 = "c++17",
+    Cpp20 = "c++20",
 }
 
 /**

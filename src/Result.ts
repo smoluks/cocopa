@@ -10,6 +10,15 @@
 import * as path from "path";
 import {fsstat, findFileIn} from "./helpers";
 
+export enum ResultCppStandard {
+    None = "",
+    Cpp98 = "c++98",
+    Cpp11 = "c++11",
+    Cpp14 = "c++14",
+    Cpp17 = "c++17",
+    Cpp20 = "c++20",
+}
+
 /**
  * Data structure carrying the output from a parsed compiler command.
  * All compiler specific option prefixes are removed for includes and
@@ -22,6 +31,7 @@ export class Result {
     compiler: string = "";
     /** Dropped arguments like -c -Ox -o, the input and output file. */
     trash: string[] = [];
+    cppStandard: ResultCppStandard = ResultCppStandard.None;
 
     /**
      * Normalize all paths which are: include paths and the path of the

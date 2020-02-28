@@ -9,7 +9,7 @@
  */
 import * as shlex from "shlex";
 
-import {Result} from "./Result";
+import {Result, ResultCppStandard} from "./Result";
 import {Parser} from "./Parser";
 import {BuiltInInfoParserGcc} from "./BuiltInInfoParserGcc";
 import {IParserTrigger} from "./helpers";
@@ -85,7 +85,43 @@ export class ParserGcc extends Parser {
             result.trash.push(arg);
         }
 
+        ParserGcc.parseCppStd(result);
+
         return result;
+    }
+
+    /**
+     * Regular expression to parse gcc options to find the C++ standard.
+     * @see https://gcc.gnu.org/projects/cxx-status.html
+     */
+    static readonly CppStandardOptionRegex = /^-std=(?:c\+\+|gnu\+\+)([0-9]+)$/;
+
+    /**
+     * Tries to extract the C++ standard from gcc compiler options.
+     * @param result The compiler options of this result will be
+     * searched for a valid C++ standard flag. The C++ standard
+     * of this object will be set accordingly.
+     */
+    public static parseCppStd(result: Result) {
+        // Initialize C++ standard from parsed options
+        const lut = new Map<string, ResultCppStandard>([
+            ["98", ResultCppStandard.Cpp98],
+            ["11", ResultCppStandard.Cpp11],
+            ["14", ResultCppStandard.Cpp14],
+            ["17", ResultCppStandard.Cpp17],
+            ["20", ResultCppStandard.Cpp20],
+        ]);
+        for (const o of result.options) {
+            const m = o.match(ParserGcc.CppStandardOptionRegex);
+            if (!m) {
+                continue;
+            }
+            const std = lut.get(m[1]);
+            if (std) {
+                result.cppStandard = std;
+                return;
+            }
+        }
     }
 }
 
