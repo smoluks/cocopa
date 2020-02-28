@@ -8,6 +8,7 @@
  * All rights reserved.
  */
 import * as path from "path";
+import {fsstat, findFileIn} from "./helpers";
 
 /**
  * Data structure carrying the output from a parsed compiler command.
@@ -38,5 +39,47 @@ export class Result {
             }
         }
         this.includes = res;
+    }
+
+    /**
+     * Tests for invalid include paths and removes them.
+     */
+    async cleanup() {
+        const incl: string[] = [];
+        for (const d of this.includes) {
+            try {
+                const s = await fsstat(d);
+                if (s.isDirectory()) {
+                    incl.push(d);
+                }
+            } catch (e) {
+                continue;
+            }
+        }
+        this.includes = incl;
+    }
+
+    /**
+     * Finds file in include paths.
+     * @param file File to be found.
+     * @param options Options to control the search.
+     * If stopOnFirst is true, the search returns the first match (default).
+     * If stopOnFirst is false, the search returns an array with all matches.
+     * @returns The full paths of the files found.
+     */
+    async findFile(
+        file: string,
+        options: {stopOnFirst: boolean} = {stopOnFirst: true},
+    ) {
+        const res: string[] = [];
+        for (const i of this.includes) {
+            for (const p of await findFileIn(i, file, options)) {
+                res.push(path.join(p, file));
+                if (options && options.stopOnFirst && res.length > 0) {
+                    return res;
+                }
+            }
+        }
+        return res;
     }
 }

@@ -31,13 +31,10 @@ export class CCppProperties {
         if (!fs.existsSync(pPath)) {
             return false;
         }
-        const propFileContentPlain = fs.readFileSync(pPath, "utf8");
-        // NOTE: in JSON backslashes are escaped to \\\\
-        const loadedProps = JSON.parse(
-            propFileContentPlain,
-        ) as CCppPropertiesContent;
 
-        // make sure everything is defined
+        const loadedProps = JSON.parse(
+            fs.readFileSync(pPath, "utf8"),
+        ) as CCppPropertiesContent;
 
         if (!loadedProps) {
             return false;
@@ -62,19 +59,14 @@ export class CCppProperties {
             return true;
         }
 
-        // empty names will be dropped
         this._changed = this._content.merge(properties, mode);
 
         return this._changed;
     }
 
     public write(pPath: string) {
-        // NOTE: in JSON backslashes are escaped to \\\\
-
         if (this._content && this._changed) {
-            // create properties folder in case it does not exist
             const propFolder = path.dirname(pPath);
-
             if (!fs.existsSync(propFolder)) {
                 fs.mkdirSync(propFolder, {recursive: true});
             }
@@ -86,6 +78,7 @@ export class CCppProperties {
         }
         return false;
     }
+
     public stringyfy() {
         return JSON.stringify(this._content, null, 4);
     }

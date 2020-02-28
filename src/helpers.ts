@@ -7,7 +7,9 @@
  *
  * All rights reserved.
  */
+import * as fs from "fs";
 import * as os from "os";
+import * as path from "path";
 
 /**
  * Escape a string such that it can be used within regular expressions.
@@ -113,4 +115,65 @@ export function getTriggerForArduinoGcc(sketch: string, platform?: string) {
 
     trigger.match.push(RegExp(sketch));
     return trigger;
+}
+
+export async function fsreaddir(dir: string) {
+    return new Promise<string[]>((resolve, reject) => {
+        fs.readdir(dir, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+export async function fsstat(entry: string) {
+    return new Promise<fs.Stats>((resolve, reject) => {
+        fs.stat(entry, (error, result) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+/**
+ * Search directories recursively for a file.
+ * @param dir Directory where the search should begin.
+ * @param what The file we're looking for.
+ * @returns The path of the directory which contains the file else undefined.
+ */
+export async function findFileIn(
+    dir: string,
+    what: string,
+    options?: {stopOnFirst: boolean},
+): Promise<string[]> {
+    try {
+        const result: string[] = [];
+        for (const entry of await fsreaddir(dir)) {
+            const p = path.join(dir, entry);
+            try {
+                const s = await fsstat(p);
+                if (s.isDirectory()) {
+                    result.push(...(await findFileIn(p, what, options)));
+                } else if (entry === what) {
+                    result.push(dir);
+                } else {
+                    continue;
+                }
+                if (options && options.stopOnFirst && result.length >= 1) {
+                    return result;
+                }
+            } catch (e) {
+                continue;
+            }
+        }
+        return result;
+    } catch (e) {
+        return [];
+    }
 }
