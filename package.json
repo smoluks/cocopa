@@ -5,9 +5,11 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "clean": "rm -rf ./lib",
     "test": "npm run build && npm run testonly",
     "testonly": "jest --config jestconfig.json",
-    "build": "tsc",
+    "compile": "tsc",
+    "build": "npm run clean && npm run compile",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prettier-check": "prettier --check \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -51,12 +53,7 @@
   "files": [
     "lib/**/*"
   ],
-  "bin": {
-    "cocopa": "./lib/cocopa.js"
-  },
   "dependencies": {
-    "chalk": "^3.0.0",
-    "commander": "^4.1.1",
     "shlex": "^2.0.1"
   }
 }

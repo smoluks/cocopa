@@ -4,15 +4,7 @@ A parser to extract include directories, defines, arguments from a compiler's co
 &nbsp;&nbsp;&nbsp;&nbsp;**This is work in progress as long you read this message -- be prepared for heavy API changes**
 
 ## TODO
-* Write command line tool which
-  * Can read the `.vscode/arduino.json` to get the main sketch and the board
-  * Run the arduino build command and run the parser
-  * provide a task file to vscode
-* Test compiler built-in extraction separately since not everybody has the exact same compiler on its system even on my system this will break as soon as arduino board packages update.  
-  
 * More documentation
-* :white_check_mark: `npm run clean` script to clean up lib -> add to preXY to clean up before making packages
-* :white_check_mark: Tool to generate stimulus and response JSON
 * Make it more generic, i.e. move Arduino/IntelliSense stuff into a separate layer/out of cocopa
   * :heavy_check_mark: move match on .ino file out of cocopa
   * :heavy_check_mark: Runner::processResults
@@ -50,23 +42,31 @@ npm publish
 * [Node command line package](https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e)
 
 ## License
-```ts
-/* CoCoPa - Compiler Command Parser, a Parser to extract include directories,
- * defines, arguments and more from compiler command line invocations.
- *
- * Copyright (C) 2020 Uli Franke - Elektronik Workshop
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+```
+CoCoPa - Compiler Command Parser, a Parser to extract include directories,
+defines, arguments and more from compiler command line invocations.
+
+Copyright (C) 2020 Uli Franke - Elektronik Workshop
+
+All rights reserved.
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 ```
