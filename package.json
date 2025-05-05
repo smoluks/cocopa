@@ -5,11 +5,14 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "clean": "rm -rf ./lib",
+    "clean": "run-script-os",
+    "clean:default": "rm -rf ./lib",
+    "clean:win32": "rd /s /q lib",
     "test": "npm run build && npm run testonly",
     "testonly": "jest --config jestconfig.json",
+    "packages": "npm i @types/node",
     "compile": "tsc",
-    "build": "npm run clean && npm run compile",
+    "build": "npm run clean && npm run packages && npm run compile",
     "prettier": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "prettier-check": "prettier --check \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -41,19 +44,19 @@
   },
   "homepage": "https://github.com/elektronikworkshop/cocopa#readme",
   "devDependencies": {
-    "@types/jest": "^25.1.3",
-    "@types/node": "^13.7.1",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1",
-    "ts-jest": "^25.2.1",
-    "tslint": "^6.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.3",
+    "prettier": "^3.5.3",
+    "run-script-os": "^1.1.6",
+    "ts-jest": "^29.3.2",
+    "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.5"
+    "typescript": "^5.8.3"
   },
   "files": [
     "lib/**/*"
   ],
   "dependencies": {
-    "shlex": "^2.0.1"
+    "shlex": "^2.1.2"
   }
 }

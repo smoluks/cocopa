@@ -78,8 +78,8 @@ export function makeRandomStringArray(
  * @see Inspiration for the keyof solution has been found
  *   here https://stackoverflow.com/a/55699349
  */
-export function randomEnumItem<T>(e: T): T[keyof T] {
-    const keys = (Object.keys(e) as unknown) as (keyof T)[];
+export function randomEnumItem<T extends object>(e: T): T[keyof T] {
+    const keys = Object.keys(e) as unknown as (keyof T)[];
     const key = keys[makeRandomInt(0, keys.length - 1)];
     return e[key];
 }

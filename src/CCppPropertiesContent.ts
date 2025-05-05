@@ -86,7 +86,7 @@ export class CCppPropertiesContent {
             }
 
             const idx = this.configurations.findIndex(
-                e => e.name === otherConf.name,
+                (e) => e.name === otherConf.name,
             );
             if (idx === -1) {
                 this.configurations.push(otherConf);
@@ -178,6 +178,6 @@ export class CCppPropertiesContent {
     }
 
     public confByName(name: string) {
-        return this.configurations.find(v => v.name === name);
+        return this.configurations.find((v) => v.name === name);
     }
 }

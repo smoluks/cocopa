@@ -15,9 +15,22 @@ test(`Result.normalize`, () => {
     r.includes.push(
         ...["/this/path/../is//not/../normalized", "/yet/another///path/.."],
     );
+
     r.normalize();
-    expect(r.compiler).toBe("/my/compiler-g++");
-    expect(r.includes).toStrictEqual(["/this/is/normalized", "/yet/another"]);
+
+    if (process.platform === "win32") {
+        expect(r.compiler).toBe("\\my\\compiler-g++");
+        expect(r.includes).toStrictEqual([
+            "\\this\\is\\normalized",
+            "\\yet\\another",
+        ]);
+    } else {
+        expect(r.compiler).toBe("/my/compiler-g++");
+        expect(r.includes).toStrictEqual([
+            "/this/is/normalized",
+            "/yet/another",
+        ]);
+    }
 
     // empty compiler shouldn't matter
     r.compiler = "";

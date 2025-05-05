@@ -88,7 +88,8 @@ export class BuiltInInfoParserGcc extends BuiltInInfoParser {
         //   #include "..." search starts here:
         //
         // but I havn't seen it so far.
-        const includeregex = /^#include\s+<\.\.\.>\ssearch\sstarts\shere\:$(.+)^End\sof\ssearch\slist\.$/ms;
+        const includeregex =
+            /^#include\s+<\.\.\.>\ssearch\sstarts\shere\:$(.+)^End\sof\ssearch\slist\.$/ms;
 
         const match = stdout.match(includeregex);
         if (!match) {

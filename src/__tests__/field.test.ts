@@ -53,7 +53,7 @@ for (const file of fs.readdirSync(path.join(stimuliDir, fieldDir))) {
         const runner = new Runner([gpp]);
         const cb = runner.callback();
 
-        lines.forEach(line => {
+        lines.forEach((line) => {
             cb(line);
         });
 
